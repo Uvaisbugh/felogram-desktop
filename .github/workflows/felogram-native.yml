@@ -14,8 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: recursive
           path: source
+      - name: Initialize pinned submodules with Windows long-path support
+        shell: bash
+        run: |
+          git -C source config core.longpaths true
+          git -C source submodule update --init --recursive --depth 1
       - name: Check native prerequisites
         shell: pwsh
         run: ./source/scripts/windows/check.ps1

@@ -64,3 +64,9 @@ set(desktop_app_skip_libs
 
 add_subdirectory(cmake)
 add_subdirectory(Telegram)
+
+if (WIN32)
+    set_target_properties(Telegram PROPERTIES
+        COMPILE_PDB_NAME_DEBUG felogram-desktop
+    )
+endif()
