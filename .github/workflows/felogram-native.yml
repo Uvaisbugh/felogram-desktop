@@ -1,0 +1,36 @@
+name: Felogram native Windows Debug
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: felogram-native-windows
+  cancel-in-progress: false
+jobs:
+  native:
+    name: Manual Windows x64 Debug build
+    runs-on: windows-2025
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          path: source
+      - name: Check native prerequisites
+        shell: pwsh
+        run: ./source/scripts/windows/check.ps1
+      - name: Prepare pinned dependencies
+        shell: pwsh
+        run: ./source/scripts/windows/prepare.ps1 -Jobs 2
+      - name: Compile native Debug app
+        shell: pwsh
+        run: ./source/scripts/windows/build.ps1 -Jobs 2
+      - name: Retain development artifact and exact build receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-x64-debug-development
+          path: |
+            source/out/Debug/Telegram.exe
+            source/out/felogram-build.json
+          if-no-files-found: error
+          retention-days: 3

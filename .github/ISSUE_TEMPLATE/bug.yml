@@ -1,0 +1,28 @@
+name: Felogram bug
+description: Report a reproducible problem in the independent Windows client.
+body:
+  - type: markdown
+    attributes:
+      value: Do not include credentials, session files, private messages or unredacted logs. Report vulnerabilities privately using SECURITY.md.
+  - type: input
+    id: build
+    attributes:
+      label: Felogram source revision or build version
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version and architecture
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps, expected result and actual result
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Redacted evidence and whether the same upstream build is affected

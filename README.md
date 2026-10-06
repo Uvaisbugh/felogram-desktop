@@ -4,6 +4,8 @@ An independent Telegram client for developers and power users. The upstream Wind
 
 Separate Android project: [felogram-android](https://github.com/Uvaisbugh/felogram-android). Upstream source/license are preserved. This fork is not affiliated with Telegram. The documentation below describes upstream Telegram Desktop.
 
+Felogram: [Windows setup](docs/FELOGRAM_BUILD_WINDOWS.md) · [build evidence](docs/WINDOWS_BASELINE.md) · [roadmap](ROADMAP.md) · [contributing](CONTRIBUTING.md) · [security reporting](SECURITY.md).
+
 ---
 
 # [Telegram Desktop][telegram_desktop] – Official Messenger
