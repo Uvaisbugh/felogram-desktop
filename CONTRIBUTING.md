@@ -1,6 +1,6 @@
 # Contributing to Felogram Desktop
 
-Felogram is an independent Telegram Desktop fork for developers and power users. Open Felogram issues and pull requests in `Uvaisbugh/felogram-desktop`. See [the roadmap](ROADMAP.md) and [Windows build instructions](docs/FELOGRAM_BUILD_WINDOWS.md). The inherited Telegram contribution policy in `.github/CONTRIBUTING.md` describes upstream; this file governs contributions to Felogram.
+Felogram is an independent Telegram Desktop fork for developers and power users. Open Felogram issues and pull requests in `Uvaisbugh/felogram-desktop`. See [the roadmap](ROADMAP.md) and [Windows build instructions](docs/FELOGRAM_BUILD_WINDOWS.md). The inherited Telegram contribution policy in `.github/upstream-CONTRIBUTING.md` describes upstream; this file governs contributions to Felogram.
 
 Start with a small issue and an observable acceptance criterion. Product feature contributions are welcome within the roadmap. Keep a pull request focused, preserve upstream behavior, and avoid unrelated formatting or generated files. Explain the user-visible result, meaningful checks, limitations and upstream conflict risk. Preserve licenses and attribution; do not add assistant attribution trailers.
 
