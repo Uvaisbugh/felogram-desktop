@@ -24,10 +24,15 @@ jobs:
           path: source
           clean: false
       - name: Initialize pinned submodules with Windows long-path support
-        shell: bash
+        shell: powershell
         run: |
+          $gitExecutable = (Get-Command git -ErrorAction Stop).Source
+          $gitUtilities = [IO.Path]::GetFullPath((Join-Path (Split-Path $gitExecutable) '..\usr\bin'))
+          if (Test-Path -LiteralPath $gitUtilities) { $env:PATH = "$gitUtilities;$env:PATH" }
           git -C source config core.longpaths true
+          if ($LASTEXITCODE -ne 0) { throw 'Git long-path configuration failed.' }
           git -C source submodule update --init --recursive --depth 1
+          if ($LASTEXITCODE -ne 0) { throw 'Pinned submodule initialization failed.' }
       - name: Attach the prepared dependency cache
         shell: powershell
         env:
