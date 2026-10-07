@@ -8,14 +8,16 @@ Date: 2026-10-06. Product: an independent Windows Telegram client for developers
 - [x] Create a separate local source folder: `E:/Explore/telgramRX/projects/felogram-desktop`.
 - [x] Keep Android in `Uvaisbugh/felogram-android` and its own source folder.
 - [x] Build the pinned upstream Windows Debug baseline and visually verify its welcome screen.
-- [ ] Make this new source checkout the active desktop development checkout; initialize pinned submodules and document how it uses prepared dependencies without duplicating or damaging caches.
-- [ ] Reproduce the Debug build from this independent checkout, then verify incremental rebuilding.
-- [ ] Put portable build, preflight and launch instructions in this repository; distinguish fresh setup from this PC's existing cache layout.
-- [ ] Document supported Windows versions and architectures from actual tests; start with Windows x64.
-- [ ] Configure contributor guidance, issue templates, security reporting and contribution expectations.
-- [ ] Add appropriate Windows CI checks, artifact retention limits and default-branch protections. Separate lightweight PR checks from expensive native builds.
+- [x] Make this new source checkout the active desktop development checkout; initialize pinned submodules and document how it uses prepared dependencies without duplicating or damaging caches.
+- [x] Reproduce the Debug build from this independent checkout, then verify incremental rebuilding.
+- [x] Put portable build, preflight and launch instructions in this repository; distinguish fresh setup from this PC's existing cache layout.
+- [x] Document supported Windows versions and architectures from actual tests; start with Windows x64.
+- [x] Configure contributor guidance, issue templates, security reporting and contribution expectations.
+- [x] Add appropriate Windows CI checks, artifact retention limits and default-branch protections. Separate lightweight PR checks from expensive native builds.
 
 Gate: a contributor can follow the documented setup, build Debug and open the app; source/toolchain/submodule revisions are recorded.
+
+Evidence: [Windows foundation results](docs/WINDOWS_BASELINE.md). Build, incremental rebuild and startup pass on this existing-cache Windows x64 setup; dedicated CI smoke passes. Fresh-machine setup and full native CI compilation remain unverified.
 
 ## 2. Define the first usable release
 
