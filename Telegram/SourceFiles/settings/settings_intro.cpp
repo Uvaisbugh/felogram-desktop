@@ -7,6 +7,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "settings/settings_intro.h"
 
+#include "boxes/about_box.h"
 #include "settings/sections/settings_advanced.h"
 #include "settings/sections/settings_main.h"
 #include "settings/sections/settings_chat.h"
@@ -104,6 +105,14 @@ object_ptr<Ui::RpWidget> CreateIntroSettings(
 
 	Ui::AddDivider(result);
 	Ui::AddSkip(result);
+
+	AddButtonWithIcon(
+		result,
+		tr::lng_menu_about(),
+		st::settingsButtonNoIcon
+	)->addClickHandler([=] {
+		window->show(Box(AboutBox));
+	});
 
 	AddButtonWithIcon(
 		result,

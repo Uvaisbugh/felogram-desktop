@@ -485,7 +485,11 @@ void Step::paintCover(QPainter &p, int top) {
 	//	planeTop += top;
 	}
 	p.drawImage(
-		QRect(planeLeft, planeTop, st::introFelogramIconSize, st::introFelogramIconSize),
+		QRect(
+			planeLeft,
+			planeTop,
+			st::introFelogramIconSize,
+			st::introFelogramIconSize),
 		Window::LogoNoMargin());
 }
 

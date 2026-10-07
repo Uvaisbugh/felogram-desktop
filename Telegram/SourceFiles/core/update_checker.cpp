@@ -1691,7 +1691,7 @@ void Updater::stop() {
 }
 
 void Updater::start(bool forceWait) {
-	if (cExeName().isEmpty()) {
+	if (UpdaterDisabled() || cExeName().isEmpty()) {
 		return;
 	}
 
@@ -2174,6 +2174,9 @@ bool checkReadyUpdate() {
 
 void UpdateApplication() {
 	if (UpdaterDisabled()) {
+#ifdef Q_OS_WIN
+		const auto url = "https://github.com/Uvaisbugh/felogram-desktop/releases";
+#else // Q_OS_WIN
 		const auto url = [&] {
 #ifdef OS_WIN_STORE
 			return "https://www.microsoft.com/en-us/store/p/telegram-desktop/9nztwsqntd0s";
@@ -2188,6 +2191,7 @@ void UpdateApplication() {
 			return "https://desktop.telegram.org";
 #endif // OS_WIN_STORE || OS_MAC_STORE
 		}();
+#endif // Q_OS_WIN
 		UrlClickHandler::Open(url);
 	} else {
 		cSetAutoUpdate(true);
