@@ -468,7 +468,7 @@ LastCrashedWindow::LastCrashedWindow(
 		}
 	}
 
-	_pleaseSendReport.setText(u"Please send us a crash report."_q);
+	_pleaseSendReport.setText(u"Felogram crash uploads are disabled. Save locally and redact before reporting."_q);
 	_yourReportName.setText(u"Crash ID: %1"_q.arg(QString(_minidumpName).replace(".dmp", "")));
 	_yourReportName.setCursor(style::cur_text);
 	_yourReportName.setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -504,7 +504,12 @@ LastCrashedWindow::LastCrashedWindow(
 }
 
 void LastCrashedWindow::saveReport() {
-	QString to = QFileDialog::getSaveFileName(0, u"Telegram Crash Report"_q, QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + u"/report.telegramcrash"_q, u"Telegram crash report (*.telegramcrash)"_q);
+	const auto to = QFileDialog::getSaveFileName(
+		0,
+		u"Felogram Crash Report"_q,
+		QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+			+ u"/report.felogramcrash"_q,
+		u"Felogram crash report (*.felogramcrash)"_q);
 	if (!to.isEmpty()) {
 		QFile file(to);
 		if (file.open(QIODevice::WriteOnly)) {

@@ -420,7 +420,7 @@ void Widget::historyMove(StackAction action, Animate animate) {
 	_back->toggle(getStep()->hasBack(), anim::type::normal);
 
 	auto stepHasCover = getStep()->hasCover();
-	_settings->toggle(!stepHasCover, anim::type::normal);
+	_settings->toggle(true, anim::type::normal);
 	if (_testModeLabel) {
 		_testModeLabel->toggle(!stepHasCover, anim::type::normal);
 	}
@@ -713,7 +713,7 @@ void Widget::showControls() {
 	_nextShownAnimation.stop();
 	_connecting->setForceHidden(false);
 	auto hasCover = getStep()->hasCover();
-	_settings->toggle(!hasCover, anim::type::instant);
+	_settings->toggle(true, anim::type::instant);
 	if (_testModeLabel) {
 		_testModeLabel->toggle(!hasCover, anim::type::instant);
 	}

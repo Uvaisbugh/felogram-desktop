@@ -45,17 +45,23 @@ rpl::producer<TextWithEntities> Text1() {
 
 rpl::producer<TextWithEntities> Text2() {
 	return tr::lng_felogram_about_links(
-		lt_source_link, rpl::single(tr::link("Source", Felogram::SourceUrl)),
-		lt_license_link, rpl::single(tr::link("License", Felogram::LicenseUrl)),
-		lt_privacy_link, rpl::single(tr::link("Privacy", Felogram::PrivacyUrl)),
-		lt_issues_link, rpl::single(tr::link("Report an issue", Felogram::IssuesUrl)),
+		lt_source_link,
+		rpl::single(tr::link(u"Source"_q, Felogram::SourceUrl)),
+		lt_license_link,
+		rpl::single(tr::link(u"License"_q, Felogram::LicenseUrl)),
+		lt_privacy_link,
+		rpl::single(tr::link(u"Privacy"_q, Felogram::PrivacyUrl)),
+		lt_issues_link,
+		rpl::single(tr::link(u"Report an issue"_q, Felogram::IssuesUrl)),
 		tr::marked);
 }
 
 rpl::producer<TextWithEntities> Text3() {
 	return tr::lng_felogram_about_attribution(
 		lt_upstream_link,
-		rpl::single(tr::link("Telegram Desktop", "https://github.com/telegramdesktop/tdesktop")),
+		rpl::single(tr::link(
+			u"Telegram Desktop"_q,
+			u"https://github.com/telegramdesktop/tdesktop"_q)),
 		tr::marked);
 }
 
@@ -80,8 +86,9 @@ void AboutBox(not_null<Ui::GenericBox*> box) {
 			st::boxRowPadding.right(),
 			st::boxRowPadding.bottom()));
 	version->setClickedCallback([=] {
-		File::OpenUrl(u"https://github.com/Uvaisbugh/felogram-desktop/commit/%1"_q.arg(
-			QString::fromLatin1(Felogram::SourceRevision).left(40)));
+		File::OpenUrl(
+			u"https://github.com/Uvaisbugh/felogram-desktop/commit/%1"_q.arg(
+				QString::fromLatin1(Felogram::SourceRevision).left(40)));
 	});
 
 	Ui::AddSkip(layout, st::aboutTopSkip);
@@ -97,10 +104,8 @@ void AboutBox(not_null<Ui::GenericBox*> box) {
 	addText(Text1());
 	addText(Text2());
 	addText(Text3());
-	addText(rpl::single(TextWithEntities{
-		u"Build: %1"_q.arg(QLatin1String(Felogram::SourceRevision)),
-		{}
-	}));
+	addText(rpl::single(tr::marked(
+		u"Build: %1"_q.arg(QLatin1String(Felogram::SourceRevision)))));
 
 	box->addButton(tr::lng_close(), [=] { box->closeBox(); });
 

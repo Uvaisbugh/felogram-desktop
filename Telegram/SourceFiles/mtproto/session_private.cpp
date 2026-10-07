@@ -9,6 +9,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "mtproto/session_private.h"
 
 #include "core/version.h"
+#include "felogram_build.h"
 #include "mtproto/details/mtproto_bound_key_creator.h"
 #include "mtproto/details/mtproto_dcenter.h"
 #include "mtproto/details/mtproto_dump_to_text.h"
@@ -88,7 +89,8 @@ using namespace details;
 #else
 	const auto arch = ' ' + QSysInfo::buildCpuArchitecture();
 #endif
-	return QString::fromLatin1(AppVersionStr) + arch + ([] {
+	return u"Felogram Dev %1"_q.arg(QLatin1String(Felogram::Version))
+		+ arch + ([] {
 #if defined OS_MAC_STORE
 		return u" Mac App Store"_q;
 #elif defined OS_WIN_STORE // OS_MAC_STORE
