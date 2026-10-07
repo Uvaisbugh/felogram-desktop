@@ -23,6 +23,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "main/main_account.h" // Account::sessionValue.
 #include "main/main_domain.h"
 #include "core/application.h"
+#include "core/version.h"
 #include "core/sandbox.h"
 #include "core/shortcuts.h"
 #include "core/update_channel.h"
@@ -889,7 +890,7 @@ void MainWindow::updateTitle() {
 		return;
 	}
 
-	const auto suffix = nativeTitleSuffix();
+	const auto suffix = nativeTitleSuffix() + u" | "_q + AppName.utf16();
 	const auto settings = Core::App().settings().windowTitleContent();
 	const auto locked = Core::App().passcodeLocked();
 	const auto counter = settings.hideTotalUnread
@@ -914,7 +915,9 @@ void MainWindow::updateTitle() {
 		: Dialogs::Key();
 	const auto thread = key ? key.thread() : nullptr;
 	if (!thread) {
-		setTitle((user.isEmpty() ? u"Telegram"_q : user) + added + suffix);
+		setTitle(user.isEmpty()
+			? (AppName.utf16() + added + nativeTitleSuffix())
+			: (user + added + suffix));
 		return;
 	}
 	const auto history = thread->owningHistory();

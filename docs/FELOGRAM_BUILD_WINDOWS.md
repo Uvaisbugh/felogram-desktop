@@ -35,7 +35,7 @@ git submodule update --init --recursive --depth 1
 
 Run from PowerShell with an execution policy that permits scripts you have reviewed. Preflight is read-only and reports missing compiler/SDK/source prerequisites. It does not prove a successful native build. Preparation initializes MSVC in a child shell, uses upstream's `qt6 skip-release silent` path and preserves completed dependency caches. The upstream preparation script may build optimized third-party libraries as part of its Debug dependency set; the application target here is Debug only.
 
-The build helper restores process environment values, selects MSVC 14.44 explicitly, uses Ninja Multi-Config and produces `out/Debug/Telegram.exe`. Its `out/felogram-build.json` records source/submodule revisions and the executable SHA-256. A launch requires a receipt for this checkout, uses `.local/profile`, and seeds `skip-url-scheme-register=true` before startup so development does not claim Telegram URL associations.
+The build helper restores process environment values, selects MSVC 14.44 explicitly, uses Ninja Multi-Config and produces `out/Debug/Felogram.exe`. Its `out/felogram-build.json` records source/submodule revisions and the executable SHA-256. A launch requires a receipt for this checkout, uses `.local/profile`, and seeds `skip-url-scheme-register=true` before startup so development does not claim Telegram URL associations.
 
 ## Existing cache layout on the development PC
 
@@ -56,7 +56,7 @@ From the independent repository, the one-time transition is:
 
 `-Reconfigure` backs up CMake's configuration files, then uses `cmake --fresh`; it does not delete dependency libraries or account profiles. Absolute source-path changes cause application objects to rebuild. Later builds omit `-Reconfigure`:
 
-The Windows application target uses a Felogram-specific compiler PDB name. This keeps its compiler debug database separate from an inherited upstream `vc140.pdb` during a shared-output transition. The old database is retained; application objects rebuild to reference the new database consistently. This is separate from the final linker PDB.
+The Windows application target uses a Felogram-specific compiler PDB name (`felogram-identity`). This keeps its compiler debug database separate from an inherited upstream `vc140.pdb` during a shared-output transition. The old database is retained; application objects rebuild to reference the new database consistently. This is separate from the final linker PDB.
 
 ```powershell
 ./scripts/windows/build.ps1 -OutputPath E:/Explore/telgramRX/build/tdesktop-baseline/out -Jobs 4
@@ -91,8 +91,10 @@ Inherited upstream workflows are preserved under `.github/upstream-workflows/` r
 - Missing `basename`, `sed` or `git-sh-setup`: use a complete Git for Windows installation and ensure its `usr/bin` is available to Git's child shell. The helpers temporarily add this path for submodule inspections.
 - Missing MSVC 14.44 or SDK: add the exact component through Visual Studio Installer, approve its administrator prompt yourself, then rerun preflight.
 - Cache belongs to another checkout: use an intentional `-Reconfigure` transition; do not hand-edit `CMakeCache.txt`.
-- Linker cannot write `Telegram.exe`: quit that exact development app from its tray menu. Do not stop an installed Telegram app or another checkout.
+- Linker cannot write `Felogram.exe`: quit that exact development app from its tray menu. Do not stop an installed Telegram app or another checkout.
 - C1090/PDB error 12 during a checkout transition: the observed recovery uses the dedicated Felogram compiler PDB, keeping all application objects consistent. Do not delete a PDB while compiler processes are active or mix objects that reference incompatible compiler databases.
 - Preparation seems to wait for a keypress: the helper supplies upstream's `silent` option and unbuffered Python logging.
 
 See [baseline evidence](WINDOWS_BASELINE.md) for actual results and [upstream build documentation](building-win.md) for dependency details.
+
+The current branded development identity and isolated profile are defined in [the identity record](FELOGRAM_IDENTITY.md). Earlier baseline evidence retains the original Telegram executable name for historical accuracy.

@@ -13,6 +13,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "core/update_channel.h"
 #include "core/update_checker.h"
 #include "core/version.h"
+#include "felogram_build.h"
 #include "lang/lang_keys.h"
 #include "ui/boxes/confirm_box.h"
 #include "ui/painter.h"
@@ -36,36 +37,32 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 namespace {
 
 rpl::producer<TextWithEntities> Text1() {
-	return tr::lng_about_text1(
+	return tr::lng_felogram_about_identity(
 		lt_api_link,
 		tr::lng_about_text1_api(tr::url(u"https://core.telegram.org/api"_q)),
 		tr::marked);
 }
 
 rpl::producer<TextWithEntities> Text2() {
-	return tr::lng_about_text2(
-		lt_gpl_link,
-		rpl::single(tr::link(
-			"GNU GPL",
-			"https://github.com/telegramdesktop/tdesktop/blob/master/LICENSE")),
-		lt_github_link,
-		rpl::single(tr::link(
-			"GitHub",
-			"https://github.com/telegramdesktop/tdesktop")),
+	return tr::lng_felogram_about_links(
+		lt_source_link, rpl::single(tr::link("Source", Felogram::SourceUrl)),
+		lt_license_link, rpl::single(tr::link("License", Felogram::LicenseUrl)),
+		lt_privacy_link, rpl::single(tr::link("Privacy", Felogram::PrivacyUrl)),
+		lt_issues_link, rpl::single(tr::link("Report an issue", Felogram::IssuesUrl)),
 		tr::marked);
 }
 
 rpl::producer<TextWithEntities> Text3() {
-	return tr::lng_about_text3(
-		lt_faq_link,
-		tr::lng_about_text3_faq(tr::url(telegramFaqLink())),
+	return tr::lng_felogram_about_attribution(
+		lt_upstream_link,
+		rpl::single(tr::link("Telegram Desktop", "https://github.com/telegramdesktop/tdesktop")),
 		tr::marked);
 }
 
 } // namespace
 
 void AboutBox(not_null<Ui::GenericBox*> box) {
-	box->setTitle(u"Telegram Desktop"_q);
+	box->setTitle(AppName.utf16());
 
 	auto layout = box->verticalLayout();
 
@@ -75,7 +72,7 @@ void AboutBox(not_null<Ui::GenericBox*> box) {
 			tr::lng_about_version(
 				tr::now,
 				lt_version,
-				currentVersionText()),
+				currentVersionShortText()),
 			st::aboutVersionLink),
 		QMargins(
 			st::boxRowPadding.left(),
@@ -83,35 +80,8 @@ void AboutBox(not_null<Ui::GenericBox*> box) {
 			st::boxRowPadding.right(),
 			st::boxRowPadding.bottom()));
 	version->setClickedCallback([=] {
-		if (cRealAlphaVersion()) {
-			auto url = u"https://tdesktop.com/"_q;
-			if (Platform::IsWindows32Bit()) {
-				url += u"win/%1.zip"_q;
-			} else if (Platform::IsWindows64Bit()) {
-				url += u"win64/%1.zip"_q;
-			} else if (Platform::IsWindowsARM64()) {
-				url += u"winarm/%1.zip"_q;
-			} else if (Platform::IsMac()) {
-				url += u"mac/%1.zip"_q;
-			} else if (Platform::IsLinux()) {
-				url += u"linux/%1.tar.xz"_q;
-			} else {
-				Unexpected("Platform value.");
-			}
-			url = url.arg(u"talpha%1_%2"_q
-				.arg(cRealAlphaVersion())
-				.arg(Core::countAlphaVersionSignature(cRealAlphaVersion())));
-
-			QGuiApplication::clipboard()->setText(url);
-
-			box->getDelegate()->show(
-				Ui::MakeInformBox(
-					"The link to the current private alpha "
-					"version of Telegram Desktop was copied "
-					"to the clipboard."));
-		} else {
-			File::OpenUrl(Core::App().changelogLink());
-		}
+		File::OpenUrl(u"https://github.com/Uvaisbugh/felogram-desktop/commit/%1"_q.arg(
+			QString::fromLatin1(Felogram::SourceRevision).left(40)));
 	});
 
 	Ui::AddSkip(layout, st::aboutTopSkip);
@@ -127,6 +97,10 @@ void AboutBox(not_null<Ui::GenericBox*> box) {
 	addText(Text1());
 	addText(Text2());
 	addText(Text3());
+	addText(rpl::single(TextWithEntities{
+		u"Build: %1"_q.arg(QLatin1String(Felogram::SourceRevision)),
+		{}
+	}));
 
 	box->addButton(tr::lng_close(), [=] { box->closeBox(); });
 
@@ -153,7 +127,9 @@ QString telegramFaqLink() {
 namespace {
 
 [[nodiscard]] QString CurrentVersionText(bool withCommit) {
-	auto result = QString::fromLatin1(AppVersionStr);
+	auto result = u"%1 / Telegram %2"_q.arg(
+		QLatin1String(Felogram::Version),
+		QLatin1String(AppVersionStr));
 	if (Core::BuildIsCanary) {
 		result += Core::CanaryVersionSuffix();
 	} else if (cAlphaVersion()) {
@@ -169,10 +145,8 @@ namespace {
 #ifdef _DEBUG
 	result += " DEBUG";
 #endif
-	if (withCommit
-		&& Core::BuildIsCanary
-		&& Core::CanaryCommitHash[0] != '\0') {
-		result += u" \u00B7 "_q + QLatin1String(Core::CanaryCommitHash);
+	if (withCommit) {
+		result += u" | "_q + QLatin1String(Felogram::SourceRevision);
 	}
 	return result;
 }
@@ -331,4 +305,3 @@ void ArchiveHintBox(
 		box->addButton(std::move(button));
 	}
 }
-

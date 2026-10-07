@@ -19,8 +19,8 @@ endif()
 project(Telegram
     LANGUAGES C CXX
     VERSION ${desktop_app_version_cmake}
-    DESCRIPTION "Official Telegram Desktop messenger"
-    HOMEPAGE_URL "https://desktop.telegram.org"
+    DESCRIPTION "Felogram independent Telegram client"
+    HOMEPAGE_URL "https://github.com/Uvaisbugh/felogram-desktop"
 )
 
 if (APPLE)
@@ -44,6 +44,10 @@ if (NOT DESKTOP_APP_USE_PACKAGED AND WIN32)
 endif()
 
 include(cmake/variables.cmake)
+if (WIN32)
+    set(DESKTOP_APP_DISABLE_AUTOUPDATE ON CACHE BOOL "Felogram updates require an independently verified service." FORCE)
+    set(DESKTOP_APP_DISABLE_CRASH_REPORTS ON CACHE BOOL "Felogram does not use upstream crash reporting." FORCE)
+endif()
 include(cmake/nice_target_sources.cmake)
 include(cmake/target_compile_options_if_exists.cmake)
 include(cmake/target_link_frameworks.cmake)
@@ -65,8 +69,22 @@ set(desktop_app_skip_libs
 add_subdirectory(cmake)
 add_subdirectory(Telegram)
 
+execute_process(COMMAND git rev-parse HEAD
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    OUTPUT_VARIABLE FELOGRAM_SOURCE_REVISION
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    COMMAND_ERROR_IS_FATAL ANY)
+execute_process(COMMAND git diff --quiet HEAD --
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    RESULT_VARIABLE felogram_dirty)
+if (felogram_dirty)
+    string(APPEND FELOGRAM_SOURCE_REVISION "-dirty")
+endif()
+configure_file(Telegram/SourceFiles/core/felogram_build.h.in ${CMAKE_BINARY_DIR}/felogram/felogram_build.h @ONLY)
+target_include_directories(Telegram PRIVATE ${CMAKE_BINARY_DIR}/felogram)
 if (WIN32)
     set_target_properties(Telegram PROPERTIES
-        COMPILE_PDB_NAME_DEBUG felogram-desktop
+        OUTPUT_NAME Felogram
+        COMPILE_PDB_NAME_DEBUG felogram-identity
     )
 endif()

@@ -2,7 +2,7 @@
 param()
 $ErrorActionPreference = 'Stop'
 $root = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
-$required = @('README.md', 'FELOGRAM.md', 'ROADMAP.md', 'CONTRIBUTING.md', 'SECURITY.md', 'docs\FELOGRAM_BUILD_WINDOWS.md', 'docs\WINDOWS_BASELINE.md', 'LICENSE', 'LEGAL')
+$required = @('README.md', 'FELOGRAM.md', 'ROADMAP.md', 'CONTRIBUTING.md', 'SECURITY.md', 'PRIVACY.md', 'docs\FELOGRAM_BUILD_WINDOWS.md', 'docs\WINDOWS_BASELINE.md', 'LICENSE', 'LEGAL')
 foreach ($file in $required) {
     if (-not (Test-Path -LiteralPath (Join-Path $root $file))) { throw "Missing contributor/release document: $file" }
 }

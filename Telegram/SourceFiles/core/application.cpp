@@ -142,6 +142,7 @@ base::options::toggle OptionSkipUrlSchemeRegister({
 	.id = kOptionSkipUrlSchemeRegister,
 	.name = "Skip URL scheme register",
 	.description = "Don't re-register tg:// URL scheme on autoupdate.",
+	.defaultValue = true,
 });
 
 } // namespace
@@ -1272,7 +1273,7 @@ bool Application::openInternalUrl(const QString &url, QVariant context) {
 }
 
 QString Application::changelogLink() const {
-	return u"https://telegramdesktop.github.io/tdesktop/changelog/"_q;
+	return u"https://github.com/Uvaisbugh/felogram-desktop/releases"_q;
 }
 
 bool Application::openCustomUrl(
@@ -2049,7 +2050,7 @@ void Application::RegisterUrlScheme() {
 		.arguments = arguments,
 		.protocol = u"tg"_q,
 		.protocolName = u"Telegram Link"_q,
-		.shortAppName = u"tdesktop"_q,
+		.shortAppName = u"felogram-dev"_q,
 		.longAppName = QCoreApplication::applicationName(),
 		.displayAppName = AppName.utf16(),
 		.displayAppDescription = AppName.utf16(),
@@ -2060,7 +2061,7 @@ void Application::RegisterUrlScheme() {
 		.arguments = arguments,
 		.protocol = u"tonsite"_q,
 		.protocolName = u"TonSite Link"_q,
-		.shortAppName = u"tdesktop"_q,
+		.shortAppName = u"felogram-dev"_q,
 		.longAppName = QCoreApplication::applicationName(),
 		.displayAppName = AppName.utf16(),
 		.displayAppDescription = AppName.utf16(),
