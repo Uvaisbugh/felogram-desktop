@@ -24,7 +24,7 @@ jobs:
           path: source
           clean: false
       - name: Initialize pinned submodules with Windows long-path support
-        shell: powershell
+        shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
         run: |
           $gitExecutable = (Get-Command git -ErrorAction Stop).Source
           $gitUtilities = [IO.Path]::GetFullPath((Join-Path (Split-Path $gitExecutable) '..\usr\bin'))
@@ -34,20 +34,20 @@ jobs:
           git -C source submodule update --init --recursive --depth 1
           if ($LASTEXITCODE -ne 0) { throw 'Pinned submodule initialization failed.' }
       - name: Attach the prepared dependency cache
-        shell: powershell
+        shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
         env:
           FELOGRAM_CACHE_ROOT: ${{ vars.FELOGRAM_DEPENDENCY_CACHE_ROOT }}
         run: ./source/scripts/windows/attach-cache.ps1 -CacheRoot $env:FELOGRAM_CACHE_ROOT
       - name: Check native prerequisites
-        shell: powershell
+        shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
         run: ./source/scripts/windows/check.ps1 -RequireDependencies
       - name: Validate source contracts
         if: inputs.mode == 'build'
-        shell: powershell
+        shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
         run: ./source/scripts/windows/validate.ps1
       - name: Compile native Debug app
         if: inputs.mode == 'build'
-        shell: powershell
+        shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
         run: ./source/scripts/windows/build.ps1 -Jobs 2
       - name: Retain development artifact and exact build receipt
         if: inputs.mode == 'build'
