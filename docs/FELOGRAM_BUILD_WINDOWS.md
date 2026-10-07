@@ -69,7 +69,20 @@ Use that explicit output path on this PC. A fresh contributor checkout uses the 
 
 `./scripts/windows/validate.ps1` checks repository documents, PowerShell syntax, forbidden system-variable writes, the pinned submodule manifest and private tracked paths. It is the lightweight required PR check, not C++ compilation.
 
-**Felogram native Windows Debug** is manual (`workflow_dispatch`) on a Windows hosted runner, with two workers and a six-hour timeout. It checks prerequisites, prepares dependencies and builds Debug. Its temporary executable/receipt artifact expires after three days and is not a public release. The runner's available compiler/SDK must pass preflight; the workflow does not silently replace missing prerequisites. A native CI run and GUI verification are distinct checks. This manual workflow has not been claimed as successful until a completed run is recorded.
+**Felogram native Windows Debug** is manual (`workflow_dispatch`) on a dedicated Windows x64 runner, with two workers and a six-hour timeout. Only the repository owner can run it from `main`. Smoke mode initializes pinned submodules, attaches the prepared cache and checks native prerequisites; build mode also compiles Debug. Its temporary executable/receipt artifact expires after three days and is not a public release. A native CI run and GUI verification are distinct checks. Smoke and compilation results are recorded separately.
+
+Standard hosted Windows runners advertise 14 GB storage; this PC's prepared dependencies and native output use about 52 GB combined. See [GitHub runner specifications](https://docs.github.com/en/actions/reference/runners/github-hosted-runners). Heavy jobs use a dedicated runner; ordinary PR checks remain hosted.
+
+The local runner is provisioned at `D:/FelogramNativeRunner`. Its checkout and output live under `_work/`, separately from the development app. Repository variable `FELOGRAM_DEPENDENCY_CACHE_ROOT` points to `E:/Explore/telgramRX/build`; sibling junctions attach the prepared dependencies without duplicating them. CI checks those dependencies and does not rebuild shared libraries concurrently. Another worker needs equivalent prepared dependencies and its own configured cache root.
+
+From an authenticated maintainer shell:
+
+```powershell
+./scripts/windows/provision-runner.ps1 -RunnerRoot D:/FelogramNativeRunner
+./scripts/windows/start-native-ci.ps1 -RunnerRoot D:/FelogramNativeRunner -Mode smoke
+```
+
+Use `-Mode build` for compilation. Provisioning verifies the official GitHub runner package's published SHA-256 and uses a short-lived registration token without putting it in source. Each registration accepts one job and deregisters afterward; provision again for the next job. Credentials and diagnostics remain in the dedicated runner folder. It is not an always-on Windows service. Start only reviewed owner-dispatched main-branch jobs; do not run untrusted pull-request code on this personal PC. The background worker opens hidden and keeps its logs in the runner folder.
 
 Inherited upstream workflows are preserved under `.github/upstream-workflows/` rather than executed with their upstream automation, service identities or large multi-platform matrices. Inherited issue forms are preserved separately; active forms point to Felogram.
 

@@ -1,6 +1,12 @@
 name: Felogram native Windows Debug
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: Verify the runner or compile the native application
+        type: choice
+        options: [smoke, build]
+        default: smoke
 permissions:
   contents: read
 concurrency:
@@ -8,28 +14,38 @@ concurrency:
   cancel-in-progress: false
 jobs:
   native:
-    name: Manual Windows x64 Debug build
-    runs-on: windows-2025
+    name: Manual Windows x64 native verification
+    if: github.ref == 'refs/heads/main' && github.actor == github.repository_owner
+    runs-on: [self-hosted, Windows, X64, felogram-native]
     timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
         with:
           path: source
+          clean: false
       - name: Initialize pinned submodules with Windows long-path support
         shell: bash
         run: |
           git -C source config core.longpaths true
           git -C source submodule update --init --recursive --depth 1
+      - name: Attach the prepared dependency cache
+        shell: powershell
+        env:
+          FELOGRAM_CACHE_ROOT: ${{ vars.FELOGRAM_DEPENDENCY_CACHE_ROOT }}
+        run: ./source/scripts/windows/attach-cache.ps1 -CacheRoot $env:FELOGRAM_CACHE_ROOT
       - name: Check native prerequisites
-        shell: pwsh
-        run: ./source/scripts/windows/check.ps1
-      - name: Prepare pinned dependencies
-        shell: pwsh
-        run: ./source/scripts/windows/prepare.ps1 -Jobs 2
+        shell: powershell
+        run: ./source/scripts/windows/check.ps1 -RequireDependencies
+      - name: Validate source contracts
+        if: inputs.mode == 'build'
+        shell: powershell
+        run: ./source/scripts/windows/validate.ps1
       - name: Compile native Debug app
-        shell: pwsh
+        if: inputs.mode == 'build'
+        shell: powershell
         run: ./source/scripts/windows/build.ps1 -Jobs 2
       - name: Retain development artifact and exact build receipt
+        if: inputs.mode == 'build'
         uses: actions/upload-artifact@v4
         with:
           name: windows-x64-debug-development
