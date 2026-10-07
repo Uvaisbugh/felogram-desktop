@@ -21,14 +21,16 @@ Evidence: [Windows foundation results](docs/WINDOWS_BASELINE.md). Build, increme
 
 ## 2. Define the first usable release
 
-- [ ] Write the first-release scope: normal Telegram use plus local workspaces, bookmarks, exact code copy and saved searches.
-- [ ] Define representative users: a developer following several projects, a technical-community participant and a power user with multiple accounts.
-- [ ] Define five practical acceptance journeys: return to a saved fix; gather project chats; copy a code snippet; repeat a search; switch chats without losing drafts.
-- [ ] Design sketches for the workspace switcher, bookmark panel, search filters and keyboard palette before implementation.
-- [ ] Agree on first-release exclusions: arbitrary plugins, bulk automation, executed snippets, automatic external AI processing and a new cloud-sync backend.
-- [ ] Convert the stages below into small issues with dependencies, acceptance criteria and evidence links.
+- [x] Write the first-release scope: normal Telegram use plus local workspaces, bookmarks, exact code copy and saved searches.
+- [x] Define representative users: a developer following several projects, a technical-community participant and a power user with multiple accounts.
+- [x] Define five practical acceptance journeys: return to a saved fix; gather project chats; copy a code snippet; repeat a search; switch chats without losing drafts.
+- [x] Design sketches for the workspace switcher, bookmark panel, search filters and keyboard palette before implementation.
+- [x] Agree on first-release exclusions: arbitrary plugins, bulk automation, executed snippets, automatic external AI processing and a new cloud-sync backend.
+- [x] Convert the stages below into small issues with dependencies, acceptance criteria and evidence links.
 
 Gate: every first-release feature has a concrete user task and an observable pass/fail result.
+
+Evidence: [first-release specification and five journeys](docs/FIRST_USABLE_RELEASE.md), [four interface sketches](docs/design/first-release-wireframes.svg), and [published issue/dependency index](docs/FIRST_RELEASE_ISSUES.md). This completes the planning gate; feature implementation and journey execution remain open.
 
 ## 3. Establish Felogram identity
 
@@ -113,7 +115,7 @@ Gate: a user can save a useful solution and find it after restart without search
 - [ ] Add exact copy actions for code entities that preserve whitespace, tabs, Unicode, newlines and backticks.
 - [ ] Show language labels, readable monospace text and wrapping controls without altering the underlying message.
 - [ ] Support keyboard selection/copy and accessible labels for code actions.
-- [ ] Provide bounded, read-only previews for supported text/log attachments; handle encoding and oversized files with a safe fallback.
+- [ ] After the first usable release: provide bounded, read-only previews for supported text/log attachments; handle encoding and oversized files with a safe fallback.
 - [ ] Never execute snippets or launch attachments automatically.
 - [ ] Verify copy output against original content, including long lines and nested backticks.
 
@@ -135,11 +137,13 @@ Gate: the user can repeat a technical search and reliably return to the matching
 - [ ] Build a command palette for navigation and implemented Felogram actions, with shortcut discovery.
 - [ ] Add workspace/bookmark/search shortcuts without conflicting with common upstream actions.
 - [ ] Preserve focus and drafts; test navigation with multiple accounts and open dialogs.
-- [ ] Evaluate independent conversation windows only after navigation/state correctness is established.
-- [ ] Implement local focus profiles using existing notification behavior, with visible state and an explicit end time.
+- [ ] After the first usable release: evaluate independent conversation windows only after navigation/state correctness is established.
+- [ ] After the first usable release: implement local focus profiles using existing notification behavior, with visible state and an explicit end time.
 - [ ] Verify required notifications still arrive and server-side read/mute semantics remain correct.
 
-Gate: common workflows work without a mouse and focus mode does not silently lose important notifications.
+First-release gate: common workflows work without a mouse, preserve focus and drafts, and keep account context visible.
+
+Later focus-profile gate: focus mode does not silently lose important notifications.
 
 ## 12. Polish Windows usability and accessibility
 
@@ -199,7 +203,7 @@ Gate: release quality and maintenance are repeatable, rather than a one-time suc
 
 ## Immediate next steps
 
-1. Reproduce development from the separate Windows checkout.
-2. Implement independent identity and private API configuration.
-3. Complete real-account messaging/coexistence checks.
-4. Implement and verify project workspaces before starting another differentiator.
+1. Implement independent Felogram identity and verify coexistence; see I1–I4 in the issue index.
+2. Configure private maintainer API settings and verify manual account login; see A1–A3.
+3. Complete real-account messaging checks and full dedicated native CI verification; see M1–M3 and CI1.
+4. Review account-scoped persistence, then implement project workspaces; see L1–L2 and W1–W2.
