@@ -8,6 +8,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "intro/intro_step.h"
 
 #include "intro/intro_widget.h"
+#include "window/main_window.h"
 #include "intro/intro_signup.h"
 #include "storage/localstorage.h"
 #include "storage/storage_account.h"
@@ -474,7 +475,7 @@ void Step::paintCover(QPainter &p, int top) {
 	st::introCoverLeft.paint(p, left, coverHeight - st::introCoverLeft.height(), width());
 	st::introCoverRight.paint(p, width() - right - st::introCoverRight.width(), coverHeight - st::introCoverRight.height(), width());
 
-	auto planeLeft = (width() - st::introCoverIcon.width()) / 2 - st::introCoverIconLeft;
+	auto planeLeft = (width() - st::introFelogramIconSize) / 2;
 	auto planeTop = top + st::introCoverIconTop;
 	if (top < 0 && !_hasCover) {
 		const auto ratio = float64(st::introPlaneWidth / st::introPlaneHeight);
@@ -483,7 +484,9 @@ void Step::paintCover(QPainter &p, int top) {
 		planeLeft += deltaLeft;
 	//	planeTop += top;
 	}
-	st::introCoverIcon.paint(p, planeLeft, planeTop, width());
+	p.drawImage(
+		QRect(planeLeft, planeTop, st::introFelogramIconSize, st::introFelogramIconSize),
+		Window::LogoNoMargin());
 }
 
 int Step::contentLeft() const {

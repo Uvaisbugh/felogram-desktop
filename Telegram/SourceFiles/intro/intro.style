@@ -23,6 +23,7 @@ introCoverIcon: icon {
 };
 introCoverIconLeft: 50px;
 introCoverIconTop: 46px;
+introFelogramIconSize: 112px;
 
 introSettingsSkip: 10px;
 

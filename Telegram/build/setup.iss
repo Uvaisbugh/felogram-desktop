@@ -1,9 +1,10 @@
-#define MyAppShortName "Telegram"
-#define MyAppName "Telegram Desktop"
-#define MyAppPublisher "Telegram FZ-LLC"
-#define MyAppURL "https://desktop.telegram.org"
-#define MyAppExeName "Telegram.exe"
-#define MyAppId "53F49750-6209-4FBF-9CA8-7A333C87D1ED"
+#define MyAppShortName "Felogram Dev"
+#define MyAppName "Felogram Dev"
+#define MyAppPublisher "Felogram contributors"
+#define MyAppURL "https://github.com/Uvaisbugh/felogram-desktop"
+#define MyAppExeName "Felogram.exe"
+#define MyAppId "AB551605-20C7-4F1B-9B10-FE103A0DE001"
+#define FelogramVersion "0.1.0"
 #define CurrentYear GetDateTimeString('yyyy','','')
 
 [Setup]
@@ -12,25 +13,26 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{{#MyAppId}}
 AppName={#MyAppName}
-AppVersion={#MyAppVersion}
-AppCopyright={#MyAppPublisher} 2014-{#CurrentYear}
+AppVersion={#FelogramVersion}
+AppCopyright=Telegram Desktop contributors 2014-{#CurrentYear}; Felogram contributors 2026
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={userappdata}\{#MyAppName}
+VersionInfoProductName=Felogram Dev
+DefaultDirName={localappdata}\Programs\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 OutputDir={#ReleasePath}
-SetupIconFile={#SourcePath}..\Resources\art\icon256.ico
+SetupIconFile={#SourcePath}..\Resources\art\felogram\felogram.ico
 UninstallDisplayName={#MyAppName}
-UninstallDisplayIcon={app}\Telegram.exe
+UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma
 SolidCompression=yes
 DisableStartupPrompt=yes
 PrivilegesRequired=lowest
-VersionInfoVersion={#MyAppVersion}.0
-CloseApplications=force
+VersionInfoVersion={#FelogramVersion}.0
+CloseApplications=yes
 DisableDirPage=no
 DisableProgramGroupPage=no
 WizardStyle=modern
@@ -38,11 +40,11 @@ SignTool=sha256
 
 #ifndef MyOutputBaseFilename
   #if MyBuildTarget == "winarm"
-    #define MyOutputBaseFilename "tsetup-arm64." + MyAppVersionFull
+    #define MyOutputBaseFilename "felogram-dev-setup-arm64." + FelogramVersion + "-dev"
   #elif MyBuildTarget == "win64"
-    #define MyOutputBaseFilename "tsetup-x64." + MyAppVersionFull
+    #define MyOutputBaseFilename "felogram-dev-setup-x64." + FelogramVersion + "-dev"
   #else
-    #define MyOutputBaseFilename "tsetup." + MyAppVersionFull
+    #define MyOutputBaseFilename "felogram-dev-setup." + FelogramVersion + "-dev"
   #endif
 #endif
 OutputBaseFilename={#MyOutputBaseFilename}
@@ -50,15 +52,15 @@ OutputBaseFilename={#MyOutputBaseFilename}
 #if MyBuildTarget == "winarm"
   ArchitecturesAllowed="arm64"
   #define ArchModulesFolder "arm64"
-  AppVerName={#MyAppName} {#MyAppVersion} arm64
+  AppVerName={#MyAppName} {#FelogramVersion} arm64
 #elif MyBuildTarget == "win64"
   ArchitecturesAllowed="x64compatible"
   ArchitecturesInstallIn64BitMode="x64compatible"
   #define ArchModulesFolder "x64"
-  AppVerName={#MyAppName} {#MyAppVersion} 64bit
+  AppVerName={#MyAppName} {#FelogramVersion} 64bit
 #else
   #define ArchModulesFolder "x86"
-  AppVerName={#MyAppName} {#MyAppVersion} 32bit
+  AppVerName={#MyAppName} {#FelogramVersion} 32bit
 #endif
 
 #define ModulesFolder "modules\" + ArchModulesFolder
@@ -78,8 +80,7 @@ Name: "ua";      MessagesFile: "compiler:Languages\Ukrainian.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Files]
-Source: "{#ReleasePath}\Telegram.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleasePath}\Updater.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleasePath}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 #if MyBuildTarget != "winarm"
 Source: "{#ReleasePath}\{#ModulesFolder}\d3d\d3dcompiler_47.dll"; DestDir: "{app}\{#ModulesFolder}\d3d"; Flags: ignoreversion
 #endif
@@ -104,16 +105,6 @@ Type: filesandordirs; Name: "{app}\tcache"
 Type: filesandordirs; Name: "{app}\tdumps"
 Type: filesandordirs; Name: "{app}\modules"
 Type: dirifempty; Name: "{app}"
-Type: files; Name: "{userappdata}\{#MyAppName}\data"
-Type: files; Name: "{userappdata}\{#MyAppName}\data_config"
-Type: files; Name: "{userappdata}\{#MyAppName}\log.txt"
-Type: filesandordirs; Name: "{userappdata}\{#MyAppName}\DebugLogs"
-Type: filesandordirs; Name: "{userappdata}\{#MyAppName}\tupdates"
-Type: filesandordirs; Name: "{userappdata}\{#MyAppName}\tdata"
-Type: filesandordirs; Name: "{userappdata}\{#MyAppName}\tcache"
-Type: filesandordirs; Name: "{userappdata}\{#MyAppName}\tdumps"
-Type: filesandordirs; Name: "{userappdata}\{#MyAppName}\modules"
-Type: dirifempty; Name: "{userappdata}\{#MyAppName}"
 
 [Code]
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);

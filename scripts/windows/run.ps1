@@ -1,12 +1,12 @@
 [CmdletBinding()]
 param(
     [string]$OutputPath = (Join-Path $PSScriptRoot '..\..\out'),
-    [string]$ProfilePath = (Join-Path $PSScriptRoot '..\..\.local\profile')
+    [string]$ProfilePath = (Join-Path $PSScriptRoot '..\..\.local\felogram-dev')
 )
 . (Join-Path $PSScriptRoot 'common.ps1')
 if (Test-Path -LiteralPath (Join-Path $workspaceRoot '.felogram-native.lock')) { throw 'Finish the native build/preparation first.' }
 $outputRoot = [IO.Path]::GetFullPath($OutputPath)
-$executable = Join-Path $outputRoot 'Debug\Telegram.exe'
+$executable = Join-Path $outputRoot 'Debug\Felogram.exe'
 $receiptPath = Join-Path $outputRoot 'felogram-build.json'
 if (-not (Test-Path -LiteralPath $receiptPath)) { throw 'Build from this checkout first; its build receipt is missing.' }
 $receipt = Get-Content -LiteralPath $receiptPath -Raw | ConvertFrom-Json
@@ -21,5 +21,5 @@ $options = if (Test-Path -LiteralPath $optionsPath) { Get-Content -LiteralPath $
 if ($options -isnot [pscustomobject]) { throw 'Unexpected profile-options structure.' }
 $options | Add-Member -NotePropertyName 'skip-url-scheme-register' -NotePropertyValue $true -Force
 [IO.File]::WriteAllText($optionsPath, ($options | ConvertTo-Json -Depth 32), [Text.UTF8Encoding]::new($false))
-Write-Output 'Opening the upstream-branded Debug baseline with an isolated development profile.'
+Write-Output 'Opening Felogram Dev with an isolated development profile.'
 Start-Process -FilePath $executable -ArgumentList @('-workdir', ('"' + $profileRoot + '"')) -WorkingDirectory $profileRoot -PassThru | Select-Object Id, ProcessName

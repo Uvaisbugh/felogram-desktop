@@ -1,0 +1,10 @@
+#pragma once
+
+namespace Felogram {
+inline constexpr auto Version = "0.1.0-dev";
+inline constexpr auto SourceRevision = "@FELOGRAM_SOURCE_REVISION@";
+inline constexpr auto SourceUrl = "https://github.com/Uvaisbugh/felogram-desktop";
+inline constexpr auto LicenseUrl = "https://github.com/Uvaisbugh/felogram-desktop/blob/main/LICENSE";
+inline constexpr auto PrivacyUrl = "https://github.com/Uvaisbugh/felogram-desktop/blob/main/PRIVACY.md";
+inline constexpr auto IssuesUrl = "https://github.com/Uvaisbugh/felogram-desktop/issues";
+}

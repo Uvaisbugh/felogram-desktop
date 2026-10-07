@@ -8778,3 +8778,8 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 "lng_folder_archive_status" = "ZIP archive";
 
 // Keys finished
+
+"lng_felogram_intro_about" = "Independent Telegram client for developers.\nDevelopment build, not affiliated with Telegram.";
+"lng_felogram_about_identity" = "Independent Telegram client for developers and power users.\nBased on Telegram Desktop and {api_link}.";
+"lng_felogram_about_links" = "{source_link} · {license_link} · {privacy_link} · {issues_link}";
+"lng_felogram_about_attribution" = "Based on {upstream_link}, licensed under GPLv3 with the OpenSSL exception. Telegram and its contributors retain their original attribution.";

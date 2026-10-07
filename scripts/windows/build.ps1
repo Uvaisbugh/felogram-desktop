@@ -9,8 +9,8 @@ $vcvars = Get-FelogramToolchain
 Get-FelogramSubmodules | Out-Null
 Assert-FelogramDependencies | Out-Null
 $outputRoot = [IO.Path]::GetFullPath($OutputPath)
-$executable = Join-Path $outputRoot 'Debug\Telegram.exe'
-$running = @(Get-Process Telegram -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $executable })
+$executable = Join-Path $outputRoot 'Debug\Felogram.exe'
+$running = @(Get-Process Felogram -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $executable })
 if ($running.Count -gt 0) { throw 'Quit this development executable from its tray menu before rebuilding. Other Telegram installations can remain open.' }
 $cacheFile = Join-Path $outputRoot 'CMakeCache.txt'
 if (Test-Path -LiteralPath $cacheFile) {
@@ -35,7 +35,7 @@ try {
         }
     }
     $fresh = if ($Reconfigure) { '--fresh ' } else { '' }
-    $command = 'call "%FELOGRAM_VCVARS%" -vcvars_ver=14.44 && cmake ' + $fresh + '-S "%FELOGRAM_SOURCE%" -B "%FELOGRAM_OUTPUT%" -G "Ninja Multi-Config" -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CONFIGURATION_TYPES=Debug -D TDESKTOP_API_TEST=ON -D DESKTOP_APP_DISABLE_AUTOUPDATE=ON && cmake --build "%FELOGRAM_OUTPUT%" --config Debug --target Telegram --parallel %FELOGRAM_JOBS%'
+    $command = 'call "%FELOGRAM_VCVARS%" -vcvars_ver=14.44 && cmake ' + $fresh + '-S "%FELOGRAM_SOURCE%" -B "%FELOGRAM_OUTPUT%" -G "Ninja Multi-Config" -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CONFIGURATION_TYPES=Debug -D TDESKTOP_API_TEST=ON -D DESKTOP_APP_DISABLE_AUTOUPDATE=ON -D DESKTOP_APP_DISABLE_CRASH_REPORTS=ON && cmake --build "%FELOGRAM_OUTPUT%" --config Debug --target Telegram --parallel %FELOGRAM_JOBS%'
     Invoke-FelogramNativeCommand $command @{
         FELOGRAM_VCVARS = $vcvars
         FELOGRAM_SOURCE = $repoRoot
@@ -52,6 +52,9 @@ try {
         sourceRevision = (& git -C $repoRoot rev-parse HEAD)
         submodules = @(Get-FelogramSubmodules)
         outputRoot = $outputRoot
+        product = 'Felogram Dev'
+        productVersion = '0.1.0-dev'
+        executableName = 'Felogram.exe'
         configuration = 'Debug'
         architecture = 'x64'
         sha256 = (Get-FileHash -LiteralPath $executable -Algorithm SHA256).Hash
