@@ -1,0 +1,27 @@
+name: Felogram checks
+on:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: felogram-checks-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  windows:
+    name: Windows repository checks
+    runs-on: windows-2025
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Validate contributor contracts and Windows scripts
+        shell: pwsh
+        run: ./scripts/windows/validate.ps1
+      - name: Validate patch whitespace
+        shell: pwsh
+        run: git diff --check HEAD^

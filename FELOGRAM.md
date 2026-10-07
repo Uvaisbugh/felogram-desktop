@@ -10,6 +10,8 @@ This repository preserves upstream source/history and its GPLv3 license with the
 
 ## First product milestones
 
+See [the full ordered implementation checklist](ROADMAP.md) for steps, dependencies and acceptance gates.
+
 1. Independent Felogram name, icons, About/source links, profile identity and private maintainer API configuration.
 2. Verify login, message exchange, files, reconnect, notifications and account isolation.
 3. Local project workspaces: collect related groups, channels and saved references into a project view.

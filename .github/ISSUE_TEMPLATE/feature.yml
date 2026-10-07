@@ -1,0 +1,19 @@
+name: Felogram feature proposal
+description: Propose a developer or power-user workflow improvement.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem and concrete example
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Proposed behavior and acceptance criterion
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Roadmap stage, alternatives and privacy or maintenance implications
