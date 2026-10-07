@@ -4,13 +4,15 @@ An independent Windows Telegram client for developers and power users, based on 
 
 ## Verified foundation
 
-The upstream revision `d8594c011756265de4385408540bd9f7c787a003` built successfully on Windows on 2026-10-06 using MSVC 14.44.35207, Qt 6.11.2, Ninja Multi-Config and Debug configuration. Its welcome screen was visually verified with a separate test profile. The local baseline executable still carries Telegram branding and uses upstream test API configuration. No public Felogram Windows binary is released. Real account, messaging, notification and device tests remain open.
+The independent checkout passed its Windows x64 Debug build, incremental rebuild and visual startup check on 2026-10-07. Dedicated native CI smoke also passed. See [the exact foundation evidence](docs/WINDOWS_BASELINE.md) for source, toolchain, hash and limitations. The running baseline still carries Telegram branding and uses upstream test API configuration. No public Felogram Windows binary is released. Real account, messaging, notification and device tests remain open.
 
 This repository preserves upstream source/history and its GPLv3 license with the OpenSSL exception. The MIT Python prototype is a separate project; its completion status does not apply to this native client.
 
 ## First product milestones
 
 See [the full ordered implementation checklist](ROADMAP.md) for steps, dependencies and acceptance gates.
+
+The [first usable release specification](docs/FIRST_USABLE_RELEASE.md) defines scope, personas, five pass/fail journeys and exclusions. Review the [interface sketches](docs/design/first-release-wireframes.svg) and [GitHub issue/dependency index](docs/FIRST_RELEASE_ISSUES.md) before starting feature implementation.
 
 1. Independent Felogram name, icons, About/source links, profile identity and private maintainer API configuration.
 2. Verify login, message exchange, files, reconnect, notifications and account isolation.
@@ -32,4 +34,4 @@ Windows and Android share product goals and acceptance scenarios, with separate 
 
 ## Local baseline on the development PC
 
-The proven build remains at `E:/Explore/telgramRX/build/tdesktop-baseline` while this separate source checkout is established. Its dependencies are cached under `E:/Explore/telgramRX/build/Libraries`; its test profile is `E:/Explore/telgramRX/build/native-desktop-profile`. From the prototype workspace, `scripts/build_native_windows.ps1` reproduces the Debug baseline and `scripts/run_native_baseline.ps1` launches it. Those local paths are evidence for this PC, not a portable build guide for this fresh checkout. Initialize pinned submodules and follow the upstream Windows build documentation for a separate fresh build.
+The active source is `E:/Explore/telgramRX/projects/felogram-desktop`. This PC reuses the prepared caches and output under `E:/Explore/telgramRX/build`; the independent development profile is `.local/profile` inside this checkout. The prototype workspace's `Run Native Windows.cmd` opens the verified executable through this repository's receipt-checking launch helper. Follow [the Windows build guide](docs/FELOGRAM_BUILD_WINDOWS.md), which separates fresh setup from this PC's existing-cache commands.
