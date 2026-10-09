@@ -89,6 +89,12 @@ namespace {
 
 using namespace Builder;
 
+auto SendToMenuTitle() {
+	return tr::lng_settings_add_sendto() | rpl::map([](QString text) {
+		return text.replace(u"Telegram"_q, u"Felogram Dev"_q);
+	});
+}
+
 #if defined Q_OS_MAC && !defined OS_MAC_STORE
 [[nodiscard]] const QImage &IconMacRound() {
 	static const auto result = QImage(u":/gui/art/icon_round512@2x.png"_q);
@@ -772,7 +778,7 @@ void BuildSystemIntegrationSection(SectionBuilder &builder) {
 	if (Platform::IsWindows() && !Platform::IsWindowsStoreBuild()) {
 		const auto sendto = builder.addCheckbox({
 			.id = u"advanced/sendto"_q,
-			.title = tr::lng_settings_add_sendto(),
+			.title = SendToMenuTitle(),
 			.checked = cSendToMenu(),
 			.keywords = { u"sendto"_q, u"send"_q, u"menu"_q, u"context"_q },
 		});
@@ -1933,7 +1939,7 @@ void SetupSystemIntegrationContent(
 
 	if (Platform::IsWindows() && !Platform::IsWindowsStoreBuild()) {
 		const auto sendto = addCheckbox(
-			tr::lng_settings_add_sendto(),
+			SendToMenuTitle(),
 			cSendToMenu());
 
 		sendto->checkedChanges(
