@@ -36,7 +36,9 @@ CloseApplications=yes
 DisableDirPage=no
 DisableProgramGroupPage=no
 WizardStyle=modern
+#ifndef FelogramUnsignedDevelopment
 SignTool=sha256
+#endif
 
 #ifndef MyOutputBaseFilename
   #if MyBuildTarget == "winarm"
@@ -47,7 +49,11 @@ SignTool=sha256
     #define MyOutputBaseFilename "felogram-dev-setup." + FelogramVersion + "-dev"
   #endif
 #endif
+#ifdef FelogramUnsignedDevelopment
+OutputBaseFilename={#MyOutputBaseFilename}-unsigned-local
+#else
 OutputBaseFilename={#MyOutputBaseFilename}
+#endif
 
 #if MyBuildTarget == "winarm"
   ArchitecturesAllowed="arm64"
