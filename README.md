@@ -1,6 +1,6 @@
 # Felogram Desktop — native Windows foundation
 
-An independent Telegram client for developers and power users. The upstream Windows Debug baseline builds and its welcome screen opens on the development PC. **Felogram-specific Windows features and branding are still planned; no production binary is released.** See [status and milestones](FELOGRAM.md).
+An independent Telegram client for developers and power users. The Windows x64 Debug build identifies itself as **Felogram Dev 0.1.0-dev**, with independent icons, profile paths and Windows identities. Developer workspace features are planned; no production binary is released. See [status and milestones](FELOGRAM.md).
 
 Separate Android project: [felogram-android](https://github.com/Uvaisbugh/felogram-android). Upstream source/license are preserved. This fork is not affiliated with Telegram. The documentation below describes upstream Telegram Desktop.
 
