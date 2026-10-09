@@ -1,6 +1,6 @@
 # Build Felogram Desktop on Windows
 
-This guide builds the upstream-branded **x64 Debug development baseline**, not a production Felogram release. Development uses the upstream limited test API configuration; maintainer API configuration and independent branding are later milestones. Never enter Telegram account codes or credentials in build logs.
+This guide builds **Felogram Dev x64 Debug**, not a production Felogram release. Development uses the upstream limited test API configuration; maintainer API configuration remains a later milestone. Never enter Telegram account codes or credentials in build logs.
 
 ## Prerequisites
 
@@ -35,7 +35,7 @@ git submodule update --init --recursive --depth 1
 
 Run from PowerShell with an execution policy that permits scripts you have reviewed. Preflight is read-only and reports missing compiler/SDK/source prerequisites. It does not prove a successful native build. Preparation initializes MSVC in a child shell, uses upstream's `qt6 skip-release silent` path and preserves completed dependency caches. The upstream preparation script may build optimized third-party libraries as part of its Debug dependency set; the application target here is Debug only.
 
-The build helper restores process environment values, selects MSVC 14.44 explicitly, uses Ninja Multi-Config and produces `out/Debug/Felogram.exe`. Its `out/felogram-build.json` records source/submodule revisions and the executable SHA-256. A launch requires a receipt for this checkout, uses `.local/profile`, and seeds `skip-url-scheme-register=true` before startup so development does not claim Telegram URL associations.
+The build helper restores process environment values, selects MSVC 14.44 explicitly, uses Ninja Multi-Config and produces `out/Debug/Felogram.exe`. Its `out/felogram-build.json` records source/submodule revisions and the executable SHA-256. A launch requires a receipt for this checkout, uses `.local/felogram-dev`, and seeds `skip-url-scheme-register=true` before startup so development does not claim Telegram URL associations.
 
 ## Existing cache layout on the development PC
 

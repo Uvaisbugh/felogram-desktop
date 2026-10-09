@@ -34,17 +34,19 @@ Evidence: [first-release specification and five journeys](docs/FIRST_USABLE_RELE
 
 ## 3. Establish Felogram identity
 
-- [ ] Set independent app/window names, executable identity, version metadata and development-build labels.
-- [ ] Create Felogram launcher, taskbar, tray and installer icons; verify light/dark backgrounds and scaling.
-- [ ] Replace upstream welcome claims with an accurate independent-client description.
-- [ ] Add About links to source, license, privacy statement, issue reporting and exact build/version information.
-- [ ] Define app data, installation, shortcuts, IPC and Windows AppUserModelID identities that coexist with official Telegram.
+- [x] Set independent app/window names, executable identity, version metadata and development-build labels.
+- [x] Create Felogram launcher, taskbar, tray and installer icons; verify light/dark backgrounds and scaling.
+- [x] Replace upstream welcome claims with an accurate independent-client description.
+- [x] Add About links to source, license, privacy statement, issue reporting and exact build/version information.
+- [x] Define app data, installation, shortcuts, IPC and Windows AppUserModelID identities that coexist with official Telegram.
 - [ ] Verify official Telegram sessions and settings are unaffected by installing, launching and removing Felogram.
-- [ ] Decide optional `tg:` link registration behavior; avoid changing default associations on a development launch.
-- [ ] Remove or replace upstream update-service, crash-service and other product-specific identities that must not be used by this fork.
-- [ ] Keep upstream attribution and all relevant license notices.
+- [x] Decide optional `tg:` link registration behavior; avoid changing default associations on a development launch.
+- [x] Remove or replace upstream update-service, crash-service and other product-specific identities that must not be used by this fork.
+- [x] Keep upstream attribution and all relevant license notices.
 
 Gate: the app clearly identifies itself as Felogram and can coexist with Telegram without profile or installation collisions.
+
+Evidence: [identity and verification record](docs/FELOGRAM_IDENTITY.md), [icon sizes on light/dark backgrounds](docs/design/felogram-icon-review.png) and [local installer procedure](docs/IDENTITY_INSTALLER_TEST.md). Icon asset scaling covers 16/24/32 px (100/150/200%); full mixed-monitor DPI testing remains open. Implementation and packaging checks are complete, but the gate is **not passed**: the coexistence run exposed access violations in both development clients, and no installed signed-in official Telegram account was available to verify session preservation. See [I4](https://github.com/Uvaisbugh/felogram-desktop/issues/9).
 
 ## 4. Configure real account testing
 
