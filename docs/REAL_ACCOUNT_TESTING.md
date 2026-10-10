@@ -75,3 +75,15 @@ Upstream automatic updates and crash uploads remain disabled. Windows can create
 ## Gate status
 
 The manual rows above stay open until their results are actually observed. Private configuration validation, sample rejection and distribution checks can be tested without logging into an account; those tests do not verify QR/phone login, two-step verification, persistence, logout or switching.
+
+### Verified setup evidence — 2026-10-10
+
+- Tested source: `283d67de87e9198d028192947fa4d2d4ecb5b15c`, Windows build `26300.9550`, x64 Debug, MSVC 14.44, Windows SDK 10.0.26100.0 and prepared Qt 6.11.2 Debug dependencies. The full baseline rebuild completed, followed by an incremental rebuild of the exact version metadata.
+- Tested executable: `508029440` bytes; SHA-256 `0DABDB1741E28F8003B78D26E1467468131955B0103097F5697A48ED69B06F34`. The build receipt reports `apiMode=Baseline`, `testApi=true`, `maintainerApiConfigured=false` and `distributionReady=false`. About shows the same tested source revision.
+- `scripts/windows/validate.ps1` and all nine `test-api-gates.ps1` fixtures pass locally. Missing, empty, malformed, out-of-range, invalid-hash and upstream-sample cases reject; synthetic valid configuration and explicit Baseline pass; Baseline distribution rejects. The fixture suite also passed in Windows PowerShell 5.1. No fixture performs account authorization.
+- Both [push checks](https://github.com/Uvaisbugh/felogram-desktop/actions/runs/38025600293) and [PR checks](https://github.com/Uvaisbugh/felogram-desktop/actions/runs/38025602812) passed at the tested commit.
+- Default launch rejects the Baseline receipt with a setup message. Explicit `-AllowBaseline` opens `.local/felogram-baseline/`. [Welcome evidence](design/felogram-baseline-setup.png) visibly states that sign-in is disabled; [About evidence](design/felogram-baseline-about.png) identifies the API mode and exact build. Clicking **Set up account testing** leaves the setup screen in place instead of entering QR/phone authorization.
+- The actual Inno Setup 6.7.3 compiler rejects signed packaging without the maintainer configuration flag. This is a supported-workflow guard; it does not cryptographically attest API ownership. Unsigned development packaging is still local-only and no release artifact has been approved.
+- The private local JSON is ignored by Git and restricted to the current Windows user and SYSTEM. Its current saved contents fail both API format checks. Only validity flags were inspected; no values were printed. Maintainer ownership cannot be established by syntax validation or a synthetic fixture.
+
+Remaining handoff: save valid application API values privately, quit the Baseline test window, build Account mode, and perform the manual journeys above. The Baseline window was left under the user's control. No owned account was signed in, no authentication UI was automated and no login/session result is marked passed.

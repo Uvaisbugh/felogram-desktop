@@ -1,6 +1,6 @@
 # Felogram Desktop implementation checklist
 
-Date: 2026-10-06. Product: an independent Windows Telegram client for developers and power users. Deliver a reliable everyday messenger, then make technical conversations easier to organize and revisit. These are planned steps, not completed feature claims. Check off a step only when its acceptance evidence exists.
+Date: 2026-10-10. Product: an independent Windows Telegram client for developers and power users. Deliver a reliable everyday messenger, then make technical conversations easier to organize and revisit. These are planned steps, not completed feature claims. Check off a step only when its acceptance evidence exists.
 
 ## 1. Establish the independent project
 
@@ -50,9 +50,10 @@ Evidence: [identity and verification record](docs/FELOGRAM_IDENTITY.md), [icon s
 
 ## 4. Configure real account testing
 
-- [ ] Obtain maintainer-owned Telegram API configuration and document private local configuration without committing credentials.
-- [ ] Make missing configuration produce a clear development setup state; prevent an unconfigured build from being distributed.
-- [ ] Keep upstream test API configuration limited to baseline testing.
+- [x] Document private maintainer API configuration, create an ignored local configuration helper and restrict its file permissions without committing credentials.
+- [ ] Obtain and validate maintainer-owned Telegram API configuration. The current private file fails format validation; the maintainer must correct and save it before an Account build can start.
+- [x] Make missing configuration produce a clear development setup state; prevent an unconfigured build from being distributed through the supported build/packaging workflow.
+- [x] Keep upstream test API configuration limited to explicit baseline testing, with sign-in disabled and a separate profile.
 - [ ] Have the user sign in manually; do not collect phone numbers, codes or passwords through project issues or chat.
 - [ ] Verify supported QR/phone login paths, two-step verification and authorization error states.
 - [ ] Verify close/reopen session persistence, logout and account switching.
@@ -60,7 +61,7 @@ Evidence: [identity and verification record](docs/FELOGRAM_IDENTITY.md), [icon s
 
 Gate: owned test accounts can sign in, reopen and log out reliably; configuration and session secrets remain private.
 
-Setup and tests: [private API workflow, manual journeys and diagnostic redaction](docs/REAL_ACCOUNT_TESTING.md). PowerShell/CMake configuration fixtures check missing/invalid/sample values, valid synthetic configuration and the Baseline distribution rejection without contacting Telegram. Native build/UI verification and maintainer-owned configuration are required before checking off the remaining rows. The account gate stays open until manual authorization, persistence, logout and switching actually pass.
+Status: **setup implementation verified; real-account gate pending**. [Private API workflow, exact build/test evidence, manual journeys and diagnostic redaction](docs/REAL_ACCOUNT_TESTING.md), implemented in [PR #44](https://github.com/Uvaisbugh/felogram-desktop/pull/44). All nine configuration fixtures and both hosted checks pass. Windows x64 Debug full/incremental builds and the accountless setup/About screens are verified at `283d67de87e9198d028192947fa4d2d4ecb5b15c`. Default launch rejects the Baseline receipt; the installer compiler rejects signed packaging without the maintainer configuration flag. These results do not prove real account authorization. The gate stays open until valid owned configuration and manual login, persistence, logout and switching actually pass.
 
 ## 5. Verify everyday Telegram behavior
 
@@ -207,7 +208,7 @@ Gate: release quality and maintenance are repeatable, rather than a one-time suc
 
 ## Immediate next steps
 
-1. Implement independent Felogram identity and verify coexistence; see I1–I4 in the issue index.
-2. Configure private maintainer API settings and verify manual account login; see A1–A3.
+1. Correct and validate the private maintainer API file, build Account mode and verify manual account login/session journeys; see A1–A3.
+2. Finish signed-in official Telegram coexistence verification; see I4 in the issue index.
 3. Complete real-account messaging checks and full dedicated native CI verification; see M1–M3 and CI1.
 4. Review account-scoped persistence, then implement project workspaces; see L1–L2 and W1–W2.
