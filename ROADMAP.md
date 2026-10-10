@@ -46,7 +46,7 @@ Evidence: [first-release specification and five journeys](docs/FIRST_USABLE_RELE
 
 Gate: the app clearly identifies itself as Felogram and can coexist with Telegram without profile or installation collisions.
 
-Evidence: [identity and verification record](docs/FELOGRAM_IDENTITY.md), [icon sizes on light/dark backgrounds](docs/design/felogram-icon-review.png) and [local installer procedure](docs/IDENTITY_INSTALLER_TEST.md). Icon asset scaling covers 16/24/32 px (100/150/200%); full mixed-monitor DPI testing remains open. Implementation and packaging checks are complete, but the gate is **not passed**: the coexistence run exposed access violations in both development clients, and no installed signed-in official Telegram account was available to verify session preservation. See [I4](https://github.com/Uvaisbugh/felogram-desktop/issues/9).
+Evidence: [identity and verification record](docs/FELOGRAM_IDENTITY.md), [icon sizes on light/dark backgrounds](docs/design/felogram-icon-review.png) and [local installer procedure](docs/IDENTITY_INSTALLER_TEST.md). Icon asset scaling covers 16/24/32 px (100/150/200%); full mixed-monitor DPI testing remains open. The reproduced Felogram shutdown crash is fixed and three clean-quit cycles pass. The gate still requires an installed signed-in official Telegram account to verify real session preservation; none was available on this PC. See [I4](https://github.com/Uvaisbugh/felogram-desktop/issues/9).
 
 ## 4. Configure real account testing
 
