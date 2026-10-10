@@ -2,9 +2,12 @@
 param(
     [string]$OutputPath = (Join-Path $PSScriptRoot '..\..\out'),
     [ValidateRange(1, 16)][int]$Jobs = 2,
-    [switch]$Reconfigure
+    [switch]$Reconfigure,
+    [ValidateSet('Account', 'Baseline')][string]$ApiMode = 'Account',
+    [string]$ApiConfigPath = (Join-Path $PSScriptRoot '..\..\.local\telegram-api.local.json')
 )
 . (Join-Path $PSScriptRoot 'common.ps1')
+if ($ApiMode -eq 'Account') { Get-FelogramApiConfiguration $ApiConfigPath | Out-Null }
 $vcvars = Get-FelogramToolchain
 Get-FelogramSubmodules | Out-Null
 Assert-FelogramDependencies | Out-Null
@@ -22,6 +25,7 @@ if (Test-Path -LiteralPath $cacheFile) {
     }
 }
 New-Item -ItemType Directory -Path $outputRoot -Force | Out-Null
+if ($ApiMode -eq 'Account') { Protect-FelogramPrivatePath $outputRoot }
 $buildLock = Open-FelogramBuildLock
 try {
     $previousReceipt = Join-Path $outputRoot 'felogram-build.json'
@@ -35,12 +39,14 @@ try {
         }
     }
     $fresh = if ($Reconfigure) { '--fresh ' } else { '' }
-    $command = 'call "%FELOGRAM_VCVARS%" -vcvars_ver=14.44 && cmake ' + $fresh + '-S "%FELOGRAM_SOURCE%" -B "%FELOGRAM_OUTPUT%" -G "Ninja Multi-Config" -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CONFIGURATION_TYPES=Debug -D TDESKTOP_API_TEST=ON -D DESKTOP_APP_DISABLE_AUTOUPDATE=ON -D DESKTOP_APP_DISABLE_CRASH_REPORTS=ON && cmake --build "%FELOGRAM_OUTPUT%" --config Debug --target Telegram --parallel %FELOGRAM_JOBS%'
+    $command = 'call "%FELOGRAM_VCVARS%" -vcvars_ver=14.44 && cmake ' + $fresh + '-S "%FELOGRAM_SOURCE%" -B "%FELOGRAM_OUTPUT%" -G "Ninja Multi-Config" -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CONFIGURATION_TYPES=Debug -D TDESKTOP_API_TEST=OFF -D FELOGRAM_API_MODE=%FELOGRAM_API_MODE% -D FELOGRAM_API_CONFIG="%FELOGRAM_API_CONFIG%" -D FELOGRAM_DISTRIBUTION=OFF -D DESKTOP_APP_DISABLE_AUTOUPDATE=ON -D DESKTOP_APP_DISABLE_CRASH_REPORTS=ON && cmake --build "%FELOGRAM_OUTPUT%" --config Debug --target Telegram --parallel %FELOGRAM_JOBS%'
     Invoke-FelogramNativeCommand $command @{
         FELOGRAM_VCVARS = $vcvars
         FELOGRAM_SOURCE = $repoRoot
         FELOGRAM_OUTPUT = $outputRoot
         FELOGRAM_JOBS = $Jobs
+        FELOGRAM_API_MODE = $ApiMode
+        FELOGRAM_API_CONFIG = [IO.Path]::GetFullPath($ApiConfigPath)
         QT = '6.11.2'
         CMAKE_BUILD_PARALLEL_LEVEL = $Jobs
         PSModulePath = "$env:SystemRoot\System32\WindowsPowerShell\v1.0\Modules;$env:ProgramFiles\WindowsPowerShell\Modules"
@@ -58,7 +64,9 @@ try {
         configuration = 'Debug'
         architecture = 'x64'
         sha256 = (Get-FileHash -LiteralPath $executable -Algorithm SHA256).Hash
-        testApi = $true
+        apiMode = $ApiMode
+        maintainerApiConfigured = ($ApiMode -eq 'Account')
+        testApi = ($ApiMode -eq 'Baseline')
         distributionReady = $false
     }
     [IO.File]::WriteAllText((Join-Path $outputRoot 'felogram-build.json'), ($receipt | ConvertTo-Json -Depth 4), [Text.UTF8Encoding]::new($false))

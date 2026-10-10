@@ -1,0 +1,7 @@
+#pragma once
+
+namespace Felogram {
+inline constexpr auto ApiId = @felogram_api_id@;
+inline constexpr auto ApiHash = "@felogram_api_hash@";
+inline constexpr auto BaselineApi = @felogram_api_baseline@;
+}

@@ -1,6 +1,6 @@
 # Build Felogram Desktop on Windows
 
-This guide builds **Felogram Dev x64 Debug**, not a production Felogram release. Development uses the upstream limited test API configuration; maintainer API configuration remains a later milestone. Never enter Telegram account codes or credentials in build logs.
+This guide builds **Felogram Dev x64 Debug**, not a production Felogram release. Account mode requires private maintainer API configuration; the upstream sample is reserved for explicit UI Baseline mode. Follow [real account setup](REAL_ACCOUNT_TESTING.md). Never enter Telegram account codes or credentials in build logs.
 
 ## Prerequisites
 
@@ -26,6 +26,7 @@ git clone https://github.com/Uvaisbugh/felogram-desktop.git DesktopWork/felogram
 Set-Location DesktopWork/felogram-desktop
 git config core.longpaths true
 git submodule update --init --recursive --depth 1
+./scripts/windows/configure-api.ps1 -OpenEditor
 ./scripts/windows/check.ps1
 ./scripts/windows/prepare.ps1 -Jobs 2
 ./scripts/windows/check.ps1 -RequireDependencies
@@ -35,7 +36,9 @@ git submodule update --init --recursive --depth 1
 
 Run from PowerShell with an execution policy that permits scripts you have reviewed. Preflight is read-only and reports missing compiler/SDK/source prerequisites. It does not prove a successful native build. Preparation initializes MSVC in a child shell, uses upstream's `qt6 skip-release silent` path and preserves completed dependency caches. The upstream preparation script may build optimized third-party libraries as part of its Debug dependency set; the application target here is Debug only.
 
-The build helper restores process environment values, selects MSVC 14.44 explicitly, uses Ninja Multi-Config and produces `out/Debug/Felogram.exe`. Its `out/felogram-build.json` records source/submodule revisions and the executable SHA-256. A launch requires a receipt for this checkout, uses `.local/felogram-dev`, and seeds `skip-url-scheme-register=true` before startup so development does not claim Telegram URL associations.
+The build helper restores process environment values, selects MSVC 14.44 explicitly, uses Ninja Multi-Config and produces `out/Debug/Felogram.exe`. Its `out/felogram-build.json` records source/submodule revisions, API mode and executable SHA-256 without API values. Account build output and `.local/felogram-account/` are restricted to the current Windows user and SYSTEM. A launch requires a receipt for this checkout and seeds `skip-url-scheme-register=true` so development does not claim Telegram URL associations. Missing API configuration produces setup instructions instead of a baseline fallback.
+
+For accountless UI checks, use `-ApiMode Baseline` with `check.ps1` and `build.ps1`, and `-AllowBaseline` with `run.ps1`. That build disables account sign-in and uses `.local/felogram-baseline/`. Preserve the earlier `.local/felogram-dev/` profile; it is not reused for either new mode. CI explicitly builds Baseline and never receives maintainer account configuration.
 
 ## Existing cache layout on the development PC
 

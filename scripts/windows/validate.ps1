@@ -29,6 +29,6 @@ try {
     if (Test-Path -LiteralPath $gitUsr) { $env:PATH = "$gitUsr;$oldPath" }
     $status = @(& git -C $root ls-files)
     if ($LASTEXITCODE -ne 0) { throw 'Cannot inspect tracked paths.' }
-    if (@($status | Where-Object { $_ -match '(^|/)(\.env|\.felogram\.properties|custom_api_id\.h)$|\.(pfx|p12)$|^\.local/' }).Count -gt 0) { throw 'Private configuration or signing files are tracked.' }
+    if (@($status | Where-Object { $_ -match '(^|/)(\.env|\.felogram\.properties|custom_api_id\.h|felogram_api_config\.h|telegram-api\.local\.json)$|\.(pfx|p12)$|^\.local/' }).Count -gt 0) { throw 'Private configuration or signing files are tracked.' }
 } finally { $env:PATH = $oldPath }
 Write-Output 'Repository documents, PowerShell syntax, reserved variables, pinned manifest and private-path checks passed. Native compilation is a separate check.'

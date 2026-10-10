@@ -36,6 +36,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "boxes/abstract_box.h"
 #include "core/update_checker.h"
 #include "core/application.h"
+#include "felogram_api_config.h"
 #include "mtproto/mtproto_dc_options.h"
 #include "window/window_slide_animation.h"
 #include "window/window_connecting_widget.h"
@@ -107,9 +108,14 @@ Widget::Widget(
 		crl::on_main(this, [=] { createLanguageLink(); });
 	}, lifetime());
 
+	if (Felogram::BaselineApi) {
+		point = EnterPoint::Start;
+	}
 	switch (point) {
 	case EnterPoint::Start:
-		getNearestDC();
+		if (!Felogram::BaselineApi) {
+			getNearestDC();
+		}
 		appendStep(new StartWidget(this, _account, getData()));
 		break;
 	case EnterPoint::Phone:

@@ -40,7 +40,7 @@ jobs:
         run: ./source/scripts/windows/attach-cache.ps1 -CacheRoot $env:FELOGRAM_CACHE_ROOT
       - name: Check native prerequisites
         shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
-        run: ./source/scripts/windows/check.ps1 -RequireDependencies
+        run: ./source/scripts/windows/check.ps1 -RequireDependencies -ApiMode Baseline
       - name: Validate source contracts
         if: inputs.mode == 'build'
         shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
@@ -48,7 +48,7 @@ jobs:
       - name: Compile native Debug app
         if: inputs.mode == 'build'
         shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
-        run: ./source/scripts/windows/build.ps1 -Jobs 2
+        run: ./source/scripts/windows/build.ps1 -Jobs 2 -ApiMode Baseline
       - name: Retain development artifact and exact build receipt
         if: inputs.mode == 'build'
         uses: actions/upload-artifact@v4

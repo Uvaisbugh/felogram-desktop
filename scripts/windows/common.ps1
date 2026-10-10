@@ -2,6 +2,47 @@ $ErrorActionPreference = 'Stop'
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
 $workspaceRoot = Split-Path -Parent $repoRoot
 
+function Get-FelogramApiConfiguration([string]$Path) {
+    $configurationPath = [IO.Path]::GetFullPath($Path)
+    if ($configurationPath.StartsWith($repoRoot + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) {
+        & git -C $repoRoot check-ignore --quiet -- $configurationPath
+        if ($LASTEXITCODE -ne 0) { throw 'Private API configuration inside this checkout must be ignored by Git. Use .local/telegram-api.local.json.' }
+    }
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
+        throw 'Felogram account setup required. Run scripts/windows/configure-api.ps1, enter your own API values in its private file, then build again. No baseline fallback is enabled.'
+    }
+    try { $configuration = Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json } catch {
+        throw 'Private API configuration is not valid JSON. Values were not logged.'
+    }
+    $apiId = [string]$configuration.api_id
+    $apiHash = [string]$configuration.api_hash
+    if ($apiId -notmatch '^[1-9][0-9]{0,9}$' -or [long]$apiId -gt [int]::MaxValue -or $apiHash -notmatch '^[0-9a-fA-F]{32}$') {
+        throw 'Account setup requires a positive 32-bit api_id and a 32-character hexadecimal api_hash. Values were not logged.'
+    }
+    if ($apiId -eq '17349' -or $apiHash -eq '344583e45741c457fe1862106095a5eb') {
+        throw 'Account testing requires maintainer-owned API configuration; the upstream sample is reserved for explicit Baseline mode.'
+    }
+    return [pscustomobject]@{ Path = [IO.Path]::GetFullPath($Path); Mode = 'Account'; Configured = $true }
+}
+
+function Protect-FelogramPrivatePath([string]$Path) {
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent().User
+    $acl = Get-Acl -LiteralPath $Path
+    $acl.SetAccessRuleProtection($true, $false)
+    foreach ($rule in @($acl.Access)) { $acl.RemoveAccessRuleSpecific($rule) }
+    $acl.SetOwner($identity)
+    $system = [Security.Principal.SecurityIdentifier]::new('S-1-5-18')
+    foreach ($principal in @($identity, $system)) {
+        $rule = if (Test-Path -LiteralPath $Path -PathType Container) {
+            [Security.AccessControl.FileSystemAccessRule]::new($principal, 'FullControl', 'ContainerInherit,ObjectInherit', 'None', 'Allow')
+        } else {
+            [Security.AccessControl.FileSystemAccessRule]::new($principal, 'FullControl', 'Allow')
+        }
+        $acl.AddAccessRule($rule)
+    }
+    Set-Acl -LiteralPath $Path -AclObject $acl
+}
+
 function Get-FelogramToolchain {
     $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
     if (-not (Test-Path -LiteralPath $vswhere)) { throw 'Install Visual Studio C++ Build Tools, MSVC 14.44 and Windows SDK 10.0.26100.0.' }

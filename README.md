@@ -4,7 +4,7 @@ An independent Telegram client for developers and power users. The Windows x64 D
 
 Separate Android project: [felogram-android](https://github.com/Uvaisbugh/felogram-android). Upstream source/license are preserved. This fork is not affiliated with Telegram. The documentation below describes upstream Telegram Desktop.
 
-Felogram: [Windows setup](docs/FELOGRAM_BUILD_WINDOWS.md) · [build evidence](docs/WINDOWS_BASELINE.md) · [roadmap](ROADMAP.md) · [contributing](CONTRIBUTING.md) · [security reporting](SECURITY.md).
+Felogram: [Windows setup](docs/FELOGRAM_BUILD_WINDOWS.md) · [private account setup](docs/REAL_ACCOUNT_TESTING.md) · [build evidence](docs/WINDOWS_BASELINE.md) · [roadmap](ROADMAP.md) · [contributing](CONTRIBUTING.md) · [security reporting](SECURITY.md).
 
 ---
 
