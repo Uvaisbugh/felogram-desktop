@@ -56,9 +56,11 @@ Evidence: [identity and verification record](docs/FELOGRAM_IDENTITY.md), [icon s
 - [ ] Have the user sign in manually; do not collect phone numbers, codes or passwords through project issues or chat.
 - [ ] Verify supported QR/phone login paths, two-step verification and authorization error states.
 - [ ] Verify close/reopen session persistence, logout and account switching.
-- [ ] Document what diagnostics may contain and provide redaction guidance.
+- [x] Document what diagnostics may contain and provide redaction guidance.
 
 Gate: owned test accounts can sign in, reopen and log out reliably; configuration and session secrets remain private.
+
+Setup and tests: [private API workflow, manual journeys and diagnostic redaction](docs/REAL_ACCOUNT_TESTING.md). PowerShell/CMake configuration fixtures check missing/invalid/sample values, valid synthetic configuration and the Baseline distribution rejection without contacting Telegram. Native build/UI verification and maintainer-owned configuration are required before checking off the remaining rows. The account gate stays open until manual authorization, persistence, logout and switching actually pass.
 
 ## 5. Verify everyday Telegram behavior
 
