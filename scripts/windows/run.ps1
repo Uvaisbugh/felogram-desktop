@@ -12,7 +12,8 @@ $receiptPath = Join-Path $outputRoot 'felogram-build.json'
 if (-not (Test-Path -LiteralPath $receiptPath)) { throw 'Build from this checkout first; its build receipt is missing.' }
 $receipt = Get-Content -LiteralPath $receiptPath -Raw | ConvertFrom-Json
 if ($receipt.apiMode -notin @('Account', 'Baseline')) { throw 'Rebuild with the API mode controls before launching. Legacy baseline receipts cannot authorize account testing.' }
-if ($receipt.apiMode -ne 'Account' -or -not $receipt.maintainerApiConfigured -or $receipt.testApi) {
+if ($receipt.apiMode -eq 'Account' -and (-not $receipt.maintainerApiConfigured -or $receipt.testApi)) { throw 'Invalid Account build receipt. Rebuild with your private API configuration.' }
+if ($receipt.apiMode -eq 'Baseline') {
     if (-not $AllowBaseline) { throw 'Account setup required. Configure your private API file and rebuild in Account mode. Use -AllowBaseline only for explicit UI baseline checks; never use the sample API for account testing.' }
 } elseif ($AllowBaseline) { throw '-AllowBaseline cannot launch an Account build.' }
 if ([IO.Path]::GetFullPath($receipt.sourceRoot) -ne $repoRoot) { throw 'The executable was built from a different checkout.' }

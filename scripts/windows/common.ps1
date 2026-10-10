@@ -3,6 +3,11 @@ $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
 $workspaceRoot = Split-Path -Parent $repoRoot
 
 function Get-FelogramApiConfiguration([string]$Path) {
+    $configurationPath = [IO.Path]::GetFullPath($Path)
+    if ($configurationPath.StartsWith($repoRoot + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) {
+        & git -C $repoRoot check-ignore --quiet -- $configurationPath
+        if ($LASTEXITCODE -ne 0) { throw 'Private API configuration inside this checkout must be ignored by Git. Use .local/telegram-api.local.json.' }
+    }
     if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
         throw 'Felogram account setup required. Run scripts/windows/configure-api.ps1, enter your own API values in its private file, then build again. No baseline fallback is enabled.'
     }

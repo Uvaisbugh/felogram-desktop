@@ -53,3 +53,6 @@ foreach ($case in $cases) {
 }
 $results | Format-Table
 Write-Output 'API gate fixtures passed without account authorization. Synthetic configuration never contacts Telegram.'
+# The final fixture intentionally makes CMake fail. Do not let the hosted
+# PowerShell wrapper treat that expected native exit code as a script failure.
+$global:LASTEXITCODE = 0
