@@ -6,7 +6,7 @@ target_sources(test_felogram_workspaces PRIVATE
     ${src_loc}/felogram/workspaces_model.cpp
     ${src_loc}/tests/test_felogram_workspaces.cpp
 )
-target_link_libraries(test_felogram_workspaces PRIVATE Qt6::Core)
+target_link_libraries(test_felogram_workspaces PRIVATE desktop-app::external_qt)
 set_target_properties(test_felogram_workspaces PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
