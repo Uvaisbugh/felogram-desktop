@@ -22,7 +22,7 @@ The [first usable release specification](docs/FIRST_USABLE_RELEASE.md) defines s
 6. Keyboard workflows and measured accessibility/performance improvements.
 7. Signed builds, complete notices, installation/update/uninstallation checks and upstream merge rehearsals.
 
-The identity portion of milestone 1 is implemented. Maintainer API configuration and the functional/distribution milestones remain open. Local preferences and notes must be account-scoped. No automatic sending or cloud sharing is implied.
+The identity portion of milestone 1 is implemented. The [private maintainer API workflow](docs/REAL_ACCOUNT_TESTING.md) is implemented; actual maintainer values and manual account acceptance results are still required. The functional/distribution milestones remain open. Local preferences and notes must be account-scoped. No automatic sending or cloud sharing is implied.
 
 ## Separate projects
 
@@ -34,4 +34,4 @@ Windows and Android share product goals and acceptance scenarios, with separate 
 
 ## Local baseline on the development PC
 
-The active source is `E:/Explore/telgramRX/projects/felogram-desktop`. This PC reuses the prepared caches and output under `E:/Explore/telgramRX/build`; the independent development profile is `.local/felogram-dev` inside this checkout. The prototype workspace's `Run Native Windows.cmd` opens the verified executable through this repository's receipt-checking launch helper. Follow [the Windows build guide](docs/FELOGRAM_BUILD_WINDOWS.md), which separates fresh setup from this PC's existing-cache commands.
+The active source is `E:/Explore/telgramRX/projects/felogram-desktop`. This PC reuses prepared caches and output under `E:/Explore/telgramRX/build`. Account testing uses `.local/felogram-account`; explicit Baseline checks use `.local/felogram-baseline`. The earlier `.local/felogram-dev` profile is preserved. The prototype workspace's `Run Native Windows.cmd` uses this repository's receipt-checking launch helper and requires an Account build for account sign-in. Follow [the Windows build guide](docs/FELOGRAM_BUILD_WINDOWS.md), which separates fresh setup from this PC's existing-cache commands.

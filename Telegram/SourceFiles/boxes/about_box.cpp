@@ -6,6 +6,7 @@ For license and copyright information please follow this link:
 https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "boxes/about_box.h"
+#include "felogram_api_config.h"
 
 #include "base/platform/base_platform_info.h"
 #include "core/application.h"
@@ -104,6 +105,9 @@ void AboutBox(not_null<Ui::GenericBox*> box) {
 	addText(Text1());
 	addText(Text2());
 	addText(Text3());
+	addText(rpl::single(tr::marked(Felogram::BaselineApi
+		? u"API mode: Baseline; account sign-in disabled."_q
+		: u"API mode: Maintainer configuration."_q)));
 	addText(rpl::single(tr::marked(
 		u"Build: %1"_q.arg(QLatin1String(Felogram::SourceRevision)))));
 

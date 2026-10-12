@@ -7,6 +7,12 @@
 #define FelogramVersion "0.1.0"
 #define CurrentYear GetDateTimeString('yyyy','','')
 
+#ifndef FelogramUnsignedDevelopment
+  #ifndef FelogramMaintainerApiConfigured
+    #error Signed packaging requires a verified maintainer API build. Baseline or missing configuration cannot be distributed.
+  #endif
+#endif
+
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.

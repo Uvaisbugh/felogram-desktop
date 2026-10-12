@@ -2450,8 +2450,6 @@ target_include_directories(Telegram PRIVATE ${src_loc})
 
 target_compile_definitions(Telegram
 PRIVATE
-    TDESKTOP_API_ID=${TDESKTOP_API_ID}
-    TDESKTOP_API_HASH=${TDESKTOP_API_HASH}
     G_LOG_DOMAIN="Telegram"
 )
 
