@@ -63,6 +63,6 @@ Gate: all applicable matrix rows pass with owned accounts and actual devices, st
 
 ## Current record
 
-- 2026-10-12: private API syntax/sample checks and file restrictions pass. Account configuration stopped before compilation because the prepared Qt install is missing resource/plugin objects. Repair from the existing pinned Qt Debug build is in progress; no verified Account executable has been launched yet.
+- 2026-10-12: private API syntax/sample checks and file restrictions pass. Initial Account configuration stopped because the prepared Qt install was missing resource/plugin objects. Thirty-five absent objects were rebuilt from the existing pinned Qt 6.11.2 Debug sources, restored to their exact install paths and hash-verified. Account compilation is being retried; no verified Account executable has been launched yet.
 - Synthetic fixtures were generated locally. All five manifest sizes/hashes pass; PNG dimensions are 640×480 and WAV duration is three seconds. These checks do not send or receive Telegram content.
 - No send, edit, deletion, transfer, call, search, account-switch, network or notification journey has been executed. The maintainer confirmed the full two-account/second-device setup is unavailable. Limited smoke tests are also pending the Account build and manual authorization.
