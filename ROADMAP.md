@@ -78,6 +78,8 @@ Status: **setup implementation verified; real-account gate pending**. [Private A
 
 Gate: the messaging/account/network test matrix passes with real accounts. A welcome-screen test alone does not satisfy this stage.
 
+Status (2026-10-12): **live execution blocked**. The [26-case everyday messaging matrix, limited smoke procedure and synthetic fixtures](docs/EVERYDAY_TELEGRAM_TESTING.md) define observable results for all rows. Private API configuration is valid and restricted. Thirty-five missing Qt Debug objects were rebuilt, restored and hash-verified; Account compilation is being retried. The maintainer confirmed the required two-account/second-device setup is unavailable. Single-account smoke tests cannot close this gate. No messaging row is checked off based on compilation or fixture generation. Track failures and evidence in M1–M3 before implementing differentiators.
+
 ## 6. Build account-scoped local storage
 
 - [ ] Design versioned storage for workspaces, bookmarks, notes and saved queries.
