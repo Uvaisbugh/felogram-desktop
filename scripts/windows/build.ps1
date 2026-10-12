@@ -52,10 +52,13 @@ try {
         PSModulePath = "$env:SystemRoot\System32\WindowsPowerShell\v1.0\Modules;$env:ProgramFiles\WindowsPowerShell\Modules"
     }
     if (-not (Test-Path -LiteralPath $executable)) { throw 'Expected Debug executable is missing.' }
+    $revisionHeader = [IO.File]::ReadAllText((Join-Path $outputRoot 'felogram\felogram_build.h'))
+    $compiledRevision = [regex]::Match($revisionHeader, 'SourceRevision = "([0-9a-f]{40}(?:-dirty)?)";')
+    if (-not $compiledRevision.Success) { throw 'Compiled source revision is missing from the generated build metadata.' }
     $receipt = [ordered]@{
         builtAt = (Get-Date).ToUniversalTime().ToString('o')
         sourceRoot = $repoRoot
-        sourceRevision = (& git -C $repoRoot rev-parse HEAD)
+        sourceRevision = $compiledRevision.Groups[1].Value
         submodules = @(Get-FelogramSubmodules)
         outputRoot = $outputRoot
         product = 'Felogram Dev'

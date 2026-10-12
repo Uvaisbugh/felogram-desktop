@@ -76,6 +76,10 @@ Upstream automatic updates and crash uploads remain disabled. Windows can create
 
 The manual rows above stay open until their results are actually observed. Private configuration validation, sample rejection and distribution checks can be tested without logging into an account; those tests do not verify QR/phone login, two-step verification, persistence, logout or switching.
 
+### Configuration follow-up — 2026-10-12
+
+The maintainer saved the private configuration; JSON, API format and upstream-sample rejection checks now pass without printing values. The file remains ignored by Git. The permissions helper now uses a fresh access-only security descriptor and the .NET access-rule setter, preserving ownership and audit settings instead of requesting unnecessary audit privileges through `Set-Acl`. The actual private file is protected with two access rules for the current Windows user and SYSTEM. Synthetic file/directory restriction checks and all nine API fixtures pass in PowerShell 7. The updated Windows PowerShell 5.1 script could not run because this PC's execution policy blocks file scripts; no policy was changed. This supersedes the configuration/ACL blockers recorded below. The Account Debug build and manual authorization journeys still require verification.
+
 ### Verified setup evidence — 2026-10-10
 
 - Tested source: `283d67de87e9198d028192947fa4d2d4ecb5b15c`, Windows build `26300.9550`, x64 Debug, MSVC 14.44, Windows SDK 10.0.26100.0 and prepared Qt 6.11.2 Debug dependencies. The full baseline rebuild completed, followed by an incremental rebuild of the exact version metadata.

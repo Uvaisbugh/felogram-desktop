@@ -51,7 +51,7 @@ Evidence: [identity and verification record](docs/FELOGRAM_IDENTITY.md), [icon s
 ## 4. Configure real account testing
 
 - [x] Document private maintainer API configuration, create an ignored local configuration helper and restrict its file permissions without committing credentials.
-- [ ] Obtain and validate maintainer-owned Telegram API configuration. The current private file fails format validation; the maintainer must correct and save it before an Account build can start.
+- [x] Obtain private Telegram API configuration from the maintainer and validate its format and rejection of upstream sample values. The saved file passed on 2026-10-12; credentials remain ignored and private. Real authorization must still verify the configuration with Telegram.
 - [x] Make missing configuration produce a clear development setup state; prevent an unconfigured build from being distributed through the supported build/packaging workflow.
 - [x] Keep upstream test API configuration limited to explicit baseline testing, with sign-in disabled and a separate profile.
 - [ ] Have the user sign in manually; do not collect phone numbers, codes or passwords through project issues or chat.
@@ -208,7 +208,7 @@ Gate: release quality and maintenance are repeatable, rather than a one-time suc
 
 ## Immediate next steps
 
-1. Correct and validate the private maintainer API file, build Account mode and verify manual account login/session journeys; see A1–A3.
+1. Finish the Account Debug build and verify manual account login/session journeys with the saved private API configuration; see A1–A3.
 2. Finish signed-in official Telegram coexistence verification; see I4 in the issue index.
 3. Complete real-account messaging checks and full dedicated native CI verification; see M1–M3 and CI1.
 4. Review account-scoped persistence, then implement project workspaces; see L1–L2 and W1–W2.

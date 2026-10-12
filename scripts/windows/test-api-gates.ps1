@@ -51,6 +51,23 @@ foreach ($case in $cases) {
     if (($exitCode -eq 0) -ne $case.Pass) { throw "CMake API gate mismatch: $($case.Name)" }
     $results += [pscustomobject]@{ Case=$case.Name; Result='PASS' }
 }
+$aclFixture = Join-Path $fixtureRoot 'acl-fixture'
+New-Item -ItemType Directory -Path $aclFixture | Out-Null
+Protect-FelogramPrivatePath $aclFixture
+$aclFile = Join-Path $aclFixture 'synthetic.txt'
+[IO.File]::WriteAllText($aclFile, 'synthetic ACL fixture')
+$ownerBefore = (Get-Acl -LiteralPath $aclFile).Owner
+Protect-FelogramPrivatePath $aclFile
+$fileAcl = Get-Acl -LiteralPath $aclFile
+$directoryAcl = Get-Acl -LiteralPath $aclFixture
+$expectedSids = @([Security.Principal.WindowsIdentity]::GetCurrent().User.Value, 'S-1-5-18')
+foreach ($checkedAcl in @($fileAcl, $directoryAcl)) {
+    $actualSids = @($checkedAcl.Access | ForEach-Object { $_.IdentityReference.Translate([Security.Principal.SecurityIdentifier]).Value })
+    if (-not $checkedAcl.AreAccessRulesProtected -or $actualSids.Count -ne 2 -or
+        @(Compare-Object $expectedSids $actualSids).Count -ne 0) { throw 'Private-path ACL fixture failed.' }
+}
+if ($fileAcl.Owner -ne $ownerBefore) { throw 'Private-path restriction changed ownership.' }
+$results += [pscustomobject]@{ Case='private-file-and-directory-acl'; Result='PASS' }
 $results | Format-Table
 Write-Output 'API gate fixtures passed without account authorization. Synthetic configuration never contacts Telegram.'
 # The final fixture intentionally makes CMake fail. Do not let the hosted

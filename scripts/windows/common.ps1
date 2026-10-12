@@ -27,20 +27,28 @@ function Get-FelogramApiConfiguration([string]$Path) {
 
 function Protect-FelogramPrivatePath([string]$Path) {
     $identity = [Security.Principal.WindowsIdentity]::GetCurrent().User
-    $acl = Get-Acl -LiteralPath $Path
+    $isDirectory = Test-Path -LiteralPath $Path -PathType Container
+    $acl = if ($isDirectory) {
+        [Security.AccessControl.DirectorySecurity]::new()
+    } else {
+        [Security.AccessControl.FileSecurity]::new()
+    }
     $acl.SetAccessRuleProtection($true, $false)
-    foreach ($rule in @($acl.Access)) { $acl.RemoveAccessRuleSpecific($rule) }
-    $acl.SetOwner($identity)
     $system = [Security.Principal.SecurityIdentifier]::new('S-1-5-18')
     foreach ($principal in @($identity, $system)) {
-        $rule = if (Test-Path -LiteralPath $Path -PathType Container) {
+        $rule = if ($isDirectory) {
             [Security.AccessControl.FileSystemAccessRule]::new($principal, 'FullControl', 'ContainerInherit,ObjectInherit', 'None', 'Allow')
         } else {
             [Security.AccessControl.FileSystemAccessRule]::new($principal, 'FullControl', 'Allow')
         }
         $acl.AddAccessRule($rule)
     }
-    Set-Acl -LiteralPath $Path -AclObject $acl
+    $target = Get-Item -LiteralPath $Path
+    if ($PSVersionTable.PSEdition -eq 'Core') {
+        [IO.FileSystemAclExtensions]::SetAccessControl($target, $acl)
+    } else {
+        $target.SetAccessControl($acl)
+    }
 }
 
 function Get-FelogramToolchain {
