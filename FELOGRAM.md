@@ -4,7 +4,7 @@ An independent Windows Telegram client for developers and power users, based on 
 
 ## Verified foundation
 
-The independent checkout passed its Windows x64 Debug build, incremental rebuild and visual startup check on 2026-10-07. Dedicated native CI smoke also passed. See [the exact foundation evidence](docs/WINDOWS_BASELINE.md) for source, toolchain, hash and limitations. The native client now uses Felogram Dev branding and independent Windows identities; it still uses upstream test API configuration. See [identity evidence and remaining gates](docs/FELOGRAM_IDENTITY.md). No public Felogram Windows binary is released. Real account, messaging, notification and device tests remain open.
+The independent checkout passed its Windows x64 Debug build, incremental rebuild and visual startup check on 2026-10-07. Dedicated native CI smoke also passed. See [the exact foundation evidence](docs/WINDOWS_BASELINE.md) for source, toolchain, hash and limitations. The native client now uses Felogram Dev branding and independent Windows identities; Account mode uses private maintainer-owned API configuration; explicit Baseline mode retains the upstream sample for UI checks. See [identity evidence and remaining gates](docs/FELOGRAM_IDENTITY.md). No public Felogram Windows binary is released. Real account, messaging, notification and device tests remain open.
 
 This repository preserves upstream source/history and its GPLv3 license with the OpenSSL exception. The MIT Python prototype is a separate project; its completion status does not apply to this native client.
 
@@ -22,7 +22,7 @@ The [first usable release specification](docs/FIRST_USABLE_RELEASE.md) defines s
 6. Keyboard workflows and measured accessibility/performance improvements.
 7. Signed builds, complete notices, installation/update/uninstallation checks and upstream merge rehearsals.
 
-The identity portion of milestone 1 is implemented. The [private maintainer API workflow](docs/REAL_ACCOUNT_TESTING.md) is implemented; actual maintainer values and manual account acceptance results are still required. The functional/distribution milestones remain open. Local preferences and notes must be account-scoped. No automatic sending or cloud sharing is implied.
+The identity portion of milestone 1 is implemented. The [private maintainer API workflow](docs/REAL_ACCOUNT_TESTING.md) is implemented; maintainer values are configured privately on this PC, while manual account acceptance results are still required. The [local project workspace implementation and automated persistence tests](docs/PROJECT_WORKSPACES.md) are available in development builds. Live workspace and messaging acceptance and distribution milestones remain open. Local preferences and notes must be account-scoped. No automatic sending or cloud sharing is implied.
 
 ## Separate projects
 

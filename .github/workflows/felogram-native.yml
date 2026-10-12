@@ -49,6 +49,10 @@ jobs:
         if: inputs.mode == 'build'
         shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
         run: ./source/scripts/windows/build.ps1 -Jobs 2 -ApiMode Baseline
+      - name: Test local workspace persistence
+        if: inputs.mode == 'build'
+        shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
+        run: ./source/scripts/windows/test-workspaces.ps1 -QtPrefixPath "${{ github.workspace }}/Libraries/win64/Qt-6.11.2"
       - name: Retain development artifact and exact build receipt
         if: inputs.mode == 'build'
         uses: actions/upload-artifact@v4

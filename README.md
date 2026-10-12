@@ -1,14 +1,14 @@
-# Felogram Desktop — native Windows foundation
+# Felogram Desktop â€” native Windows foundation
 
-An independent Telegram client for developers and power users. The Windows x64 Debug build identifies itself as **Felogram Dev 0.1.0-dev**, with independent icons, profile paths and Windows identities. Developer workspace features are planned; no production binary is released. See [status and milestones](FELOGRAM.md).
+An independent Telegram client for developers and power users. The Windows x64 Debug build identifies itself as **Felogram Dev 0.1.0-dev**, with independent icons, profile paths and Windows identities. Project workspace navigation is implemented in development builds; live acceptance remains open. No production binary is released. See [status and milestones](FELOGRAM.md).
 
 Separate Android project: [felogram-android](https://github.com/Uvaisbugh/felogram-android). Upstream source/license are preserved. This fork is not affiliated with Telegram. The documentation below describes upstream Telegram Desktop.
 
-Felogram: [Windows setup](docs/FELOGRAM_BUILD_WINDOWS.md) · [private account setup](docs/REAL_ACCOUNT_TESTING.md) · [messaging verification](docs/EVERYDAY_TELEGRAM_TESTING.md) · [build evidence](docs/WINDOWS_BASELINE.md) · [roadmap](ROADMAP.md) · [contributing](CONTRIBUTING.md) · [security reporting](SECURITY.md).
+Felogram: [Windows setup](docs/FELOGRAM_BUILD_WINDOWS.md) Â· [private account setup](docs/REAL_ACCOUNT_TESTING.md) Â· [messaging verification](docs/EVERYDAY_TELEGRAM_TESTING.md) Â· [build evidence](docs/WINDOWS_BASELINE.md) Â· [roadmap](ROADMAP.md) Â· [contributing](CONTRIBUTING.md) Â· [security reporting](SECURITY.md).
 
 ---
 
-# [Telegram Desktop][telegram_desktop] – Official Messenger
+# [Telegram Desktop][telegram_desktop] â€“ Official Messenger
 
 This is the complete source code and the build instructions for the official [Telegram][telegram] messenger desktop client, based on the [Telegram API][telegram_api] and the [MTProto][telegram_proto] secure protocol.
 
@@ -105,5 +105,5 @@ Version **1.8.15** was the last that supports older systems
   </picture>
 </a>
 
-CI infrastructure sponsored by [Depot](https://depot.dev) — fast GitHub Actions runners.
+CI infrastructure sponsored by [Depot](https://depot.dev) â€” fast GitHub Actions runners.
 

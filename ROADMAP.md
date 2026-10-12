@@ -78,7 +78,7 @@ Status: **setup implementation verified; real-account gate pending**. [Private A
 
 Gate: the messaging/account/network test matrix passes with real accounts. A welcome-screen test alone does not satisfy this stage.
 
-Status (2026-10-12): **live execution blocked**. The [26-case everyday messaging matrix, limited smoke procedure and synthetic fixtures](docs/EVERYDAY_TELEGRAM_TESTING.md) define observable results for all rows. Private API configuration is valid and restricted. Thirty-five missing Qt Debug objects were rebuilt, restored and hash-verified; Account compilation is being retried. The maintainer confirmed the required two-account/second-device setup is unavailable. Single-account smoke tests cannot close this gate. No messaging row is checked off based on compilation or fixture generation. Track failures and evidence in M1–M3 before implementing differentiators.
+Status (2026-10-12): **live execution blocked**. The [26-case everyday messaging matrix, limited smoke procedure and synthetic fixtures](docs/EVERYDAY_TELEGRAM_TESTING.md) define observable results for all rows. Private API configuration is valid and restricted. Thirty-five missing Qt Debug objects were rebuilt, restored and hash-verified; The earlier Account Debug build completed; workspace feature compilation is in progress. The maintainer confirmed the required two-account/second-device setup is unavailable. Single-account smoke tests cannot close this gate. No messaging row is checked off based on compilation or fixture generation. Track failures and evidence in M1â€“M3 before implementing differentiators.
 
 ## 6. Build account-scoped local storage
 
@@ -92,18 +92,20 @@ Status (2026-10-12): **live execution blocked**. The [26-case everyday messaging
 
 Gate: local preferences survive restart and upgrades without leaking across accounts or corrupting Telegram data.
 
-## 7. Implement project workspaces — first differentiator
+## 7. Implement project workspaces â€” first differentiator
 
-- [ ] Create, rename, reorder and remove a workspace.
-- [ ] Add/remove existing chats, groups, channels and topics; define overlap with Telegram folders without changing server-side membership unexpectedly.
-- [ ] Add a compact workspace switcher and keyboard access.
-- [ ] Display workspace-specific chat navigation with accurate unread state and clear current account.
-- [ ] Persist workspace membership and ordering locally.
+- [x] Create, rename, reorder and remove a workspace.
+- [x] Add/remove existing chats, groups, channels and topics; define overlap with Telegram folders without changing server-side membership unexpectedly.
+- [x] Add a compact workspace switcher and keyboard access.
+- [x] Display workspace-specific chat navigation with accurate unread state and clear current account.
+- [x] Persist workspace membership and ordering locally.
 - [ ] Handle archived, deleted and inaccessible chats and changes of account.
 - [ ] Verify drafts and recipients remain correct during workspace switching.
 - [ ] Test a realistic project with support, development and release chats.
 
 Gate: reopen the app and return to a project's discussion in three actions, without losing a draft or mixing accounts.
+
+Status (2026-10-12): implementation and synthetic persistence tests are available in [Project workspaces](docs/PROJECT_WORKSPACES.md). Checked rows describe implemented behavior; live UI acceptance remains pending. Encrypted account-local records use atomic replacement, stale-writer detection and owner validation. Existing history/topic navigation preserves upstream composer handling. W1–W8 define the remaining live evidence; W7 requires a second owned account. The Stage 5 real-account messaging gate remains open.
 
 ## 8. Implement bookmarks and personal notes
 
@@ -210,7 +212,7 @@ Gate: release quality and maintenance are repeatable, rather than a one-time suc
 
 ## Immediate next steps
 
-1. Finish the Account Debug build and verify manual account login/session journeys with the saved private API configuration; see A1–A3.
+1. Finish the Account Debug build and verify manual account login/session journeys with the saved private API configuration; see A1â€“A3.
 2. Finish signed-in official Telegram coexistence verification; see I4 in the issue index.
-3. Complete real-account messaging checks and full dedicated native CI verification; see M1–M3 and CI1.
-4. Review account-scoped persistence, then implement project workspaces; see L1–L2 and W1–W2.
+3. Complete real-account messaging checks and full dedicated native CI verification; see M1â€“M3 and CI1.
+4. Review account-scoped persistence, then implement project workspaces; see L1â€“L2 and W1â€“W2.

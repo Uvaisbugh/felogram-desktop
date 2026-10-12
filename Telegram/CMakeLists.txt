@@ -25,6 +25,7 @@ get_filename_component(src_loc SourceFiles REALPATH)
 get_filename_component(res_loc Resources REALPATH)
 
 include(cmake/telegram_options.cmake)
+include(cmake/test_felogram_workspaces.cmake)
 include(cmake/lib_ffmpeg.cmake)
 include(cmake/lib_stripe.cmake)
 include(cmake/lib_tgcalls.cmake)
@@ -1466,6 +1467,12 @@ PRIVATE
     main/main_domain.h
     main/main_session.cpp
     main/main_session.h
+    felogram/workspaces_file.cpp
+    felogram/workspaces_file.h
+    felogram/workspaces_model.cpp
+    felogram/workspaces_model.h
+    felogram/workspaces_box.cpp
+    felogram/workspaces_box.h
     main/main_session_settings.cpp
     main/main_session_settings.h
     main/session/send_as_peers.cpp
