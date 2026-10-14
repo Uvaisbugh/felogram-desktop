@@ -1,6 +1,6 @@
 # Felogram Desktop implementation checklist
 
-Date: 2026-10-10. Product: an independent Windows Telegram client for developers and power users. Deliver a reliable everyday messenger, then make technical conversations easier to organize and revisit. These are planned steps, not completed feature claims. Check off a step only when its acceptance evidence exists.
+Updated: 2026-10-14. Product: an independent Windows Telegram client for developers and power users. Deliver a reliable everyday messenger, then make technical conversations easier to organize and revisit. These are planned steps, not completed feature claims. Check off a step only when its acceptance evidence exists.
 
 ## 1. Establish the independent project
 
@@ -51,17 +51,17 @@ Evidence: [identity and verification record](docs/FELOGRAM_IDENTITY.md), [icon s
 ## 4. Configure real account testing
 
 - [x] Document private maintainer API configuration, create an ignored local configuration helper and restrict its file permissions without committing credentials.
-- [x] Obtain private Telegram API configuration from the maintainer and validate its format and rejection of upstream sample values. The saved file passed on 2026-10-12; credentials remain ignored and private. Real authorization must still verify the configuration with Telegram.
+- [x] Obtain private Telegram API configuration from the maintainer and validate its format and rejection of upstream sample values. The saved file passed on 2026-10-12; credentials remain ignored and private. Manual authorization and a working signed-in chat list were observed on 2026-10-12.
 - [x] Make missing configuration produce a clear development setup state; prevent an unconfigured build from being distributed through the supported build/packaging workflow.
 - [x] Keep upstream test API configuration limited to explicit baseline testing, with sign-in disabled and a separate profile.
-- [ ] Have the user sign in manually; do not collect phone numbers, codes or passwords through project issues or chat.
+- [x] Have the user sign in manually; sign-in and a working chat list were observed on 2026-10-12. No phone numbers, codes or passwords were collected through issues or chat.
 - [ ] Verify supported QR/phone login paths, two-step verification and authorization error states.
 - [ ] Verify close/reopen session persistence, logout and account switching.
 - [x] Document what diagnostics may contain and provide redaction guidance.
 
 Gate: owned test accounts can sign in, reopen and log out reliably; configuration and session secrets remain private.
 
-Status: **setup implementation verified; real-account gate pending**. [Private API workflow, exact build/test evidence, manual journeys and diagnostic redaction](docs/REAL_ACCOUNT_TESTING.md), implemented in [PR #44](https://github.com/Uvaisbugh/felogram-desktop/pull/44). All nine configuration fixtures and both hosted checks pass. Windows x64 Debug full/incremental builds and the accountless setup/About screens are verified at `283d67de87e9198d028192947fa4d2d4ecb5b15c`. Default launch rejects the Baseline receipt; the installer compiler rejects signed packaging without the maintainer configuration flag. These results do not prove real account authorization. The gate stays open until valid owned configuration and manual login, persistence, logout and switching actually pass.
+Status (2026-10-14): **manual authorization passed; full account gate pending**. The private API workflow is implemented in [PR #44](https://github.com/Uvaisbugh/felogram-desktop/pull/44). The maintainer signed in manually on 2026-10-12; the signed-in chat list and Saved Messages composer were observed. Windows Account Debug build `a47d51d2d9a8f688307ed7ebac1d4d3cffb0dc70` completed and its executable matched the build receipt. Ten configuration/ACL fixtures pass. QR versus phone path, two-step verification, authorization errors, logout and account switching have not all been exercised. Reopening the same profile on 2026-10-14 retained the signed-in session. Those rows remain open; credentials and session files remain private.
 
 ## 5. Verify everyday Telegram behavior
 
@@ -78,7 +78,7 @@ Status: **setup implementation verified; real-account gate pending**. [Private A
 
 Gate: the messaging/account/network test matrix passes with real accounts. A welcome-screen test alone does not satisfy this stage.
 
-Status (2026-10-12): **live execution blocked**. The [26-case everyday messaging matrix, limited smoke procedure and synthetic fixtures](docs/EVERYDAY_TELEGRAM_TESTING.md) define observable results for all rows. Private API configuration is valid and restricted. Thirty-five missing Qt Debug objects were rebuilt, restored and hash-verified; The earlier Account Debug build completed; workspace feature compilation is in progress. The maintainer confirmed the required two-account/second-device setup is unavailable. Single-account smoke tests cannot close this gate. No messaging row is checked off based on compilation or fixture generation. Track failures and evidence in M1â€“M3 before implementing differentiators.
+Status (2026-10-14): **single-account testing available; full matrix pending**. The [26-case messaging matrix and synthetic fixtures](docs/EVERYDAY_TELEGRAM_TESTING.md) are ready. The Account build linked successfully and manual sign-in passed. An empty Saved Messages composer accepted an unsent synthetic draft during workspace testing; no message was sent. The run was interrupted before its navigation/persistence checks finished. Two owned accounts and a second device remain unavailable, so cross-account messaging and device/call cases cannot pass yet. No messaging row is completed solely from compilation or fixtures.
 
 ## 6. Build account-scoped local storage
 
@@ -92,7 +92,7 @@ Status (2026-10-12): **live execution blocked**. The [26-case everyday messaging
 
 Gate: local preferences survive restart and upgrades without leaking across accounts or corrupting Telegram data.
 
-## 7. Implement project workspaces â€” first differentiator
+## 7. Implement project workspaces — first differentiator
 
 - [x] Create, rename, reorder and remove a workspace.
 - [x] Add/remove existing chats, groups, channels and topics; define overlap with Telegram folders without changing server-side membership unexpectedly.
@@ -105,7 +105,7 @@ Gate: local preferences survive restart and upgrades without leaking across acco
 
 Gate: reopen the app and return to a project's discussion in three actions, without losing a draft or mixing accounts.
 
-Status (2026-10-12): implementation and synthetic persistence tests are available in [Project workspaces](docs/PROJECT_WORKSPACES.md). Checked rows describe implemented behavior; live UI acceptance remains pending. Encrypted account-local records use atomic replacement, stale-writer detection and owner validation. Existing history/topic navigation preserves upstream composer handling. W1–W8 define the remaining live evidence; W7 requires a second owned account. The Stage 5 real-account messaging gate remains open.
+Status (2026-10-14): **implementation built; live acceptance in progress**. [PR #46](https://github.com/Uvaisbugh/felogram-desktop/pull/46) contains the workspace implementation. The clean Windows x64 Account Debug build at `a47d51d2d9a8f688307ed7ebac1d4d3cffb0dc70` passed, as did both Windows workspace test targets, repository/API checks and [hosted Windows/Qt Core checks](https://github.com/Uvaisbugh/felogram-desktop/actions/runs/38241778114). Live checks passed creation, rename, moving a workspace up/down, restoring order, opening the switcher by mouse/Ctrl+Alt+W, Escape, and current-account display. The user's workspace was preserved. On 2026-10-14, session, workspace selection and the exact Saved Messages draft survived reopen; adding that chat by Tab/Space passed and prevented duplicates. Different-chat draft return, the representative project/action count, topics and unavailable entries still need live evidence. W1–W8 in [Project workspaces](docs/PROJECT_WORKSPACES.md) track partial results; W7 needs a second account. The Stage 5 gate remains open.
 
 ## 8. Implement bookmarks and personal notes
 
@@ -212,7 +212,8 @@ Gate: release quality and maintenance are repeatable, rather than a one-time suc
 
 ## Immediate next steps
 
-1. Finish the Account Debug build and verify manual account login/session journeys with the saved private API configuration; see A1â€“A3.
-2. Finish signed-in official Telegram coexistence verification; see I4 in the issue index.
-3. Complete real-account messaging checks and full dedicated native CI verification; see M1â€“M3 and CI1.
-4. Review account-scoped persistence, then implement project workspaces; see L1â€“L2 and W1â€“W2.
+1. Finish workspace acceptance with a suitable existing test discussion. Saved Messages membership, duplicate prevention and reopen/session/draft persistence now pass; verify different-chat recipients and draft return. Preserve user-created workspaces and existing drafts.
+2. Verify controlled close/reopen and the three-action journey; the user controls the running test process. Complete topic, archive/unavailable and keyboard/layout cases, recording actual results rather than inferring them from code.
+3. Complete remaining account, messaging and official Telegram coexistence gates. Keep two-account/device cases blocked until that setup is available. Run full dedicated native CI when its prerequisite branches are integrated.
+4. Extend the reviewed account-local storage for bookmarks/notes and saved queries, with versioning, atomic writes, corruption/isolation tests and private diagnostics. Workspace storage already implements these protections for its own schema; Stage 6 is not complete for all feature types.
+5. Implement bookmarks/notes, exact code copy, saved searches and the command palette in that order, each in a small reviewable change with its own acceptance evidence. Keep distribution and beta gates closed until real-account, accessibility, performance and clean-machine checks pass.

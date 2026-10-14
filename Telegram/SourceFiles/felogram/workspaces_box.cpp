@@ -116,7 +116,9 @@ QString MemberText(not_null<Main::Session*> session, WorkspaceMember member) {
 	if (!key) {
 		return tr::lng_felogram_workspace_unavailable(tr::now);
 	}
-	auto text = key.peer()->name();
+	auto text = key.peer()->isSelf()
+		? tr::lng_saved_messages(tr::now)
+		: key.peer()->name();
 	if (const auto topic = key.topic()) {
 		text += u" / "_q + topic->title();
 	}

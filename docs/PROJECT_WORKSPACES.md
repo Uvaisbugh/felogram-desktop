@@ -58,13 +58,24 @@ Use owned test chats/accounts. Do not publish account identifiers, message conte
 
 | Case | Steps | Observable pass condition | Status |
 | --- | --- | --- | --- |
-| W1 CRUD | Create two workspaces, rename, reorder, remove one | Names/order persist; other workspace and chats survive | Pending live run |
+| W1 CRUD | Create two workspaces, rename, reorder, remove one | Names/order persist; other workspace and chats survive | Partial: create, rename, move up/down, order restoration and selection after reopen passed; removal pending |
 | W2 project navigation | Add support, development and release chats; reopen app; open project discussion | Selected project survives; correct discussion opens in at most three actions | Pending live run |
 | W3 topic/folder overlap | Add parent chat and topic; put chat in two workspaces and a Telegram folder | Correct topic opens; local removal leaves other workspace/folder/server membership intact | Pending live run |
-| W4 draft/recipient | Type an unsent synthetic draft in support; navigate to development via Workspaces; return | Exact draft remains in support; development composer has its own recipient/draft; nothing sent | Pending live run |
+| W4 draft/recipient | Type an unsent synthetic draft in support; navigate to development via Workspaces; return | Exact draft remains in support; development composer has its own recipient/draft; nothing sent | Partial: exact Saved Messages test draft survived reopen and membership changes; different-chat return pending |
 | W5 unread | Receive a test message while panel is open; open entry | Count/mark follows upstream state; no unknown state displayed as zero | Pending live run |
 | W6 unavailable | Archive a member; leave/delete a disposable owned test discussion; retry/remove entry | Archive still opens after loading; unavailable entry is explicit/removable; no wrong destination | Pending live run |
 | W7 accounts | Create workspaces on account A; switch to B; switch back; reset disposable account | No A entry in B; A selection persists; reset removes only that account’s store | Blocked: second owned account unavailable |
-| W8 keyboard/layout | Ctrl+Alt+W, Tab/Enter/Space/Escape; search, narrow layout, forum and animation | Workspace controls work without covering search/forum content or stealing draft text | Pending live run |
+| W8 keyboard/layout | Ctrl+Alt+W, Tab/Enter/Space/Escape; search, narrow layout, forum and animation | Workspace controls work without covering search/forum content or stealing draft text | Partial: mouse, Ctrl+Alt+W, Escape and normal dark layout passed; remaining cases pending |
 
 Gate remains open until the live journeys pass. Synthetic storage tests and compilation do not prove draft preservation, real unread delivery, layout quality or multi-account runtime isolation.
+
+## Verification record — updated 2026-10-14
+
+- Compiled source: `a47d51d2d9a8f688307ed7ebac1d4d3cffb0dc70`, Windows x64 Debug, Account mode.
+- Executable SHA-256: `3FDA88EEE105E4B45945B0A3A085322544CDCB92D9403B9A5C91DD983D19E25B`; matches the successful build receipt.
+- Standalone and full native workspace test targets passed on Windows. [Hosted checks](https://github.com/Uvaisbugh/felogram-desktop/actions/runs/38241778114) passed on the same source revision.
+- Manual sign-in, current-account label, local creation/rename/reorder, switcher mouse/shortcut access and Escape were observed on 2026-10-12. The user's existing workspace and its relative order were preserved.
+- A separate local acceptance workspace and an unsent synthetic Saved Messages draft were created. The run was interrupted before membership and return/restart verification. Do not treat the draft's initial appearance as a preservation pass. Reobserve state before resuming; do not overwrite other draft text or send the test text.
+- No real messages, credentials, account identifiers or session files are included in this evidence. No production binary was published.
+
+On 2026-10-14, the same isolated account profile reopened signed in without another authorization step. The acceptance workspace selection and exact synthetic Saved Messages draft survived. Adding the current chat through Tab/Space created one local member; the duplicate add control disappeared, and the draft remained. This verifies a limited single-account path, not the full cross-chat/account journey. The self-chat row used the account display name, which was ambiguous; it is being corrected to the existing localized Saved Messages label.
