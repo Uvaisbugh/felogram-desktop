@@ -41,6 +41,9 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "export/export_settings.h"
 #include "webview/webview_interface.h"
 #include "window/themes/window_theme.h"
+#include "felogram/workspaces_model.h"
+#include "felogram/workspaces_file.h"
+
 
 namespace Storage {
 namespace {
@@ -765,6 +768,7 @@ void Account::writeMap() {
 
 void Account::reset() {
 	_writeSearchSuggestionsTimer.cancel();
+	QFile::remove(_basePath + u"felogram/workspaces"_q);
 
 	auto names = collectGoodNames();
 	_draftsMap.clear();
@@ -1008,6 +1012,43 @@ void Account::updateDownloads(
 
 QByteArray Account::downloadsSerialized() const {
 	return _downloadsSerialized;
+}
+
+std::optional<QByteArray> Account::readFelogramWorkspaces() const {
+	if (!_localKey) {
+		return std::nullopt;
+	}
+	const auto bytes = Felogram::ReadWorkspaceFile(_basePath + u"felogram/workspaces"_q);
+	if (!bytes || bytes->isEmpty()) {
+		return bytes;
+	}
+	auto data = EncryptedDescriptor();
+	if (!DecryptLocal(data, *bytes, _localKey)) {
+		return std::nullopt;
+	}
+	return data.buffer.readAll();
+}
+
+bool Account::writeFelogramWorkspaces(
+		const QByteArray &expected,
+		const QByteArray &payload) {
+	if (!_localKey || payload.isEmpty()
+		|| payload.size() > Felogram::Workspaces::MaxBytes) {
+		return false;
+	}
+	const auto path = _basePath + u"felogram/workspaces"_q;
+	const auto previous = Felogram::ReadWorkspaceFile(path);
+	if (!previous) {
+		return false;
+	}
+	auto original = EncryptedDescriptor();
+	if ((!previous->isEmpty() && !DecryptLocal(original, *previous, _localKey))
+		|| (previous->isEmpty() ? QByteArray() : original.buffer.readAll()) != expected) {
+		return false;
+	}
+	auto data = EncryptedDescriptor(payload.size());
+	data.stream.writeRawData(payload.constData(), payload.size());
+	return Felogram::WriteWorkspaceFile(path, *previous, PrepareEncrypted(data, _localKey));
 }
 
 void Account::writeSessionSettings() {

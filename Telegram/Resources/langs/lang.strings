@@ -8785,3 +8785,24 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 "lng_felogram_about_identity" = "Independent Telegram client for developers and power users.\nBased on Telegram Desktop and {api_link}.";
 "lng_felogram_about_links" = "{source_link} · {license_link} · {privacy_link} · {issues_link}";
 "lng_felogram_about_attribution" = "Based on {upstream_link}, licensed under GPLv3 with the OpenSSL exception. Telegram and its contributors retain their original attribution.";
+
+"lng_felogram_workspaces" = "Workspaces (Ctrl+Alt+W)";
+"lng_felogram_workspace_save_error" = "Could not save the workspace. Check the name (unique, 1–80 characters), limits (32 workspaces, 200 entries), and local storage access. Your existing data was kept.";
+"lng_felogram_workspace_create" = "Create workspace";
+"lng_felogram_workspace_rename" = "Rename workspace";
+"lng_felogram_workspace_name" = "Workspace name";
+"lng_felogram_workspace_unavailable" = "Unavailable chat or topic";
+"lng_felogram_workspace_unread_unknown" = "Unread state loading";
+"lng_felogram_workspace_unread" = "Unread";
+"lng_felogram_workspace_unavailable_help" = "This chat or topic is not currently available. Open it from All chats to load it, then try again. Deleted or inaccessible entries can be removed from this workspace.";
+"lng_felogram_workspace_account" = "Account: {name}";
+"lng_felogram_workspace_read_error" = "Cannot read this account’s workspace data. It has not been replaced. Check local storage access or restore a valid backup.";
+"lng_felogram_workspace_all" = "All chats";
+"lng_felogram_workspace_choose" = "Choose workspace";
+"lng_felogram_workspace_empty" = "Open a chat or topic, then use Add current chat or topic here. Workspace membership is local to this account.";
+"lng_felogram_workspace_remove_member" = "Remove from workspace";
+"lng_felogram_workspace_add_current" = "Add current chat or topic";
+"lng_felogram_workspace_up" = "Move workspace up";
+"lng_felogram_workspace_down" = "Move workspace down";
+"lng_felogram_workspace_remove" = "Remove workspace";
+"lng_felogram_workspace_remove_confirm" = "Remove this local workspace? Your chats, messages, Telegram folders and drafts are kept.";

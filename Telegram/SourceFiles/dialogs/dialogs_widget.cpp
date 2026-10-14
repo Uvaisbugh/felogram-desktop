@@ -7,6 +7,9 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "dialogs/dialogs_widget.h"
 
+#include "felogram/workspaces_box.h"
+#include <QtGui/QShortcut>
+
 #include "base/call_delayed.h"
 #include "base/qt/qt_key_modifiers.h"
 #include "base/options.h"
@@ -431,6 +434,19 @@ Widget::Widget(
 , _searchTimer([=] { search(); })
 , _peerSearch(&controller->session(), Api::PeerSearch::Type::WithSponsored)
 , _singleMessageSearch(&controller->session()) {
+	if (_layout == Layout::Main) {
+		_workspaceSwitcher.create(this,
+			tr::lng_felogram_workspaces(tr::now), st::dialogsLoadMoreButton);
+		_workspaceSwitcher->setFocusPolicy(Qt::StrongFocus);
+		_workspaceSwitcher->setClickedCallback([=] {
+			Felogram::ShowWorkspaces(controller);
+		});
+		const auto shortcut = new QShortcut(QKeySequence(u"Ctrl+Alt+W"_q), this);
+		shortcut->setContext(Qt::WindowShortcut);
+		QObject::connect(shortcut, &QShortcut::activated, this, [=] {
+			Felogram::ShowWorkspaces(controller);
+		});
+	}
 	const auto makeChildListShown = [](PeerId peerId, float64 shown) {
 		return InnerWidget::ChildListShown{ peerId, shown };
 	};
@@ -1992,6 +2008,9 @@ void Widget::updateControlsVisibility(bool fast) {
 		setInnerFocus();
 	}
 	updateLockUnlockPosition();
+	if (_updateScrollGeometryCached) {
+		_updateScrollGeometryCached();
+	}
 }
 
 void Widget::updateLockUnlockPosition() {
@@ -2222,6 +2241,9 @@ void Widget::updateSuggestions(anim::type animated) {
 			stopWidthAnimation();
 		});
 		_scroll->hide();
+		if (_workspaceSwitcher) {
+			_workspaceSwitcher->hide();
+		}
 	} else {
 		updateStoriesVisibility();
 	}
@@ -2816,6 +2838,9 @@ void Widget::startWidthAnimation() {
 	}
 	_widthAnimationCache = grabNonNarrowScrollFrame();
 	_scroll->hide();
+	if (_workspaceSwitcher) {
+		_workspaceSwitcher->hide();
+	}
 	if (_frozenAccountBar) {
 		_frozenAccountBar->hide();
 	}
@@ -2827,6 +2852,9 @@ void Widget::startWidthAnimation() {
 
 void Widget::stopWidthAnimation() {
 	_widthAnimationCache = QPixmap();
+	if (_updateScrollGeometryCached) {
+		_updateScrollGeometryCached();
+	}
 	if (!_showAnimation) {
 		_scroll->setVisible(!_suggestions);
 		if (_frozenAccountBar) {
@@ -2950,6 +2978,9 @@ void Widget::startSlideAnimation(
 		QPixmap newContentCache,
 		Window::SlideDirection direction) {
 	_scroll->hide();
+	if (_workspaceSwitcher) {
+		_workspaceSwitcher->hide();
+	}
 	if (_stories) {
 		_stories->setToggledHidden(true, false);
 	}
@@ -4705,7 +4736,7 @@ void Widget::updateControlsGeometry() {
 		if (_chatFilters) {
 			_chatFilters->move(0, chatFiltersTop);
 		}
-		const auto scrollTop = chatFiltersTop
+		const auto workspaceTop = chatFiltersTop
 			+ ((_chatFilters
 				&& _searchState.query.isEmpty()
 				&& !_openedForum
@@ -4713,6 +4744,24 @@ void Widget::updateControlsGeometry() {
 				&& !searchInPeer())
 				? (_chatFilters->height() * (1. - narrowRatio))
 				: 0);
+		const auto workspaceVisible = _workspaceSwitcher
+			&& !_openedForum
+			&& !_openedCommunity
+			&& !_showAnimation
+			&& _widthAnimationCache.isNull()
+			&& !_suggestions
+			&& _hidingSuggestions.empty()
+			&& _searchState.query.isEmpty()
+			&& !_searchState.community
+			&& !searchInPeer()
+			&& !narrowRatio;
+		if (_workspaceSwitcher) {
+			_workspaceSwitcher->setVisible(workspaceVisible);
+			_workspaceSwitcher->setGeometry(0, workspaceTop,
+				scrollWidth, st::dialogsLoadMoreButton.height);
+		}
+		const auto scrollTop = workspaceTop
+			+ (workspaceVisible ? st::dialogsLoadMoreButton.height : 0);
 		const auto scrollHeight = height() - scrollTop - bottomSkip;
 		const auto wasScrollHeight = _scroll->height();
 		_scroll->setGeometry(0, scrollTop, scrollWidth, scrollHeight);

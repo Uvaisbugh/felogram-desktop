@@ -84,6 +84,10 @@ public:
 	}
 
 	void writeSessionSettings();
+	[[nodiscard]] std::optional<QByteArray> readFelogramWorkspaces() const;
+	[[nodiscard]] bool writeFelogramWorkspaces(
+		const QByteArray &expected,
+		const QByteArray &payload);
 	void writeMtpData();
 	void writeMtpConfig();
 
